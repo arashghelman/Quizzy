@@ -1,0 +1,33 @@
+.FancyButton {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.2rem;
+    padding: 1em 2em;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+}
+
+.FancyButton:hover, .FancyButton:active {
+    background-position: left;
+}
+
+.FancyButton_type-primary {
+    background: linear-gradient(to left, #67cfb8 50%, #203793 50%) right;
+    background-size: 200%;
+    color: #1c043f;
+}
+
+.FancyButton_type-primary:hover, .FancyButton_type-primary:active {
+    color: #67cfb8;
+}
+
+.FancyButton_type-secondary {
+    background: linear-gradient(to left, white 50%, #bd2670 50%) right;
+    background-size: 200%;
+    color: #bd2670;
+}
+
+.FancyButton_type-secondary:hover, .FancyButton_type-secondary:active {
+    color: white;
+}
