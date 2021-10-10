@@ -1,11 +1,11 @@
 .FancyButton {
     font-family: 'Quicksand', sans-serif;
-    font-size: 1.1rem;
-    padding: 1em 2em;
     border-radius: 50px;
     border: none;
     cursor: pointer;
     transition: 0.3s ease-out;
+    font-size: 1.1rem;
+    padding: 1em 2em;
 }
 
 .FancyButton:hover {
