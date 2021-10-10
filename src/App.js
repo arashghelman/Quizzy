@@ -1,5 +1,5 @@
 import './App.css';
-import Front from './Components/Front/Front';
+import Front from './components/Front/Front';
 
 function App() {
   return (
