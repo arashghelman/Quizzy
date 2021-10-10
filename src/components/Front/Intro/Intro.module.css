@@ -1,0 +1,43 @@
+.Intro__actions-row {
+    display: flex;
+    justify-content: center;
+}
+
+.Intro__actions-row > button {
+    margin-inline: 0.6em;
+}
+
+.Intro__summary-row {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5.8em;
+    padding-inline: 7em;
+    text-align: left;
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+}
+
+.Intro__summary {
+    display: flex;
+}
+
+.Intro__summary-left {
+    font-size: 1.8rem;
+}
+
+.Intro__summary-right {
+    display: flex;
+    flex-flow: column;
+    margin-top: 1em;
+    margin-left: 1.5em;
+}
+
+.Intro__summary-right > h3 {
+    font-size: 1.3rem;
+}
+
+.Intro__summary-right > p {
+    font-family: 'Open Sans', sans-serif;
+    padding-right: 5em;
+    margin-block: 0.2em;
+}

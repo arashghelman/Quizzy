@@ -5,45 +5,19 @@
     flex-flow: column;
 }
 
-.Front > h1:first-child {
-    font-size: 3rem;
-    line-height: 1.5em;
+.Front__heading {
     font-family: 'Quicksand', sans-serif;
     background-image: linear-gradient(90deg, rgba(82,17,170,1) 16%, rgba(147,35,165,1) 56%, rgba(240,66,158,1) 83%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-.Front__actions-row {
-    display: flex;
-    justify-content: center;
-    margin-top: 2.4em;
-}
-
-.Front__actions-row > button {
-    margin-inline: 0.6em;
+    font-size: 3rem;
+    line-height: 1.5em;
 }
 
 .Front__intro-row {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 7.5em;
-    padding-inline: 7em;
-    text-align: left;
-    font-family: 'Quicksand', sans-serif;
-    color: white;
+    margin-top: 2.4em;
 }
 
-.Front__left-intro > span, .Front__right-intro > span {
-    font-family: 'Open Sans', sans-serif;
+.Front__subjects-row {
+    margin-top: 1.2em;
 }
-
-.Front__intro-title {
-    display: flex;
-    font-size: 0.9rem;
-}
-
-.Front__intro-title > h2:first-child {
-    margin-right: 0.5em;
-}
-
