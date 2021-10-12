@@ -6,13 +6,13 @@ function Intro(props) {
     
     return (
         <>
-            <div className={styles['Intro__actions-row']}>
+            <div className={styles['Intro__actionsRow']}>
                 { actions }
             </div>
-            <div className={styles['Intro__summary-row']}>
-                <div className={styles['Intro__summary']}>
-                    <h3 className={styles['Intro__summary-left']}>💪</h3>
-                    <div className={styles['Intro__summary-right']}>
+            <div className={styles['Intro__summaryRow']}>
+                <div>
+                    <h3 className={styles['Intro__summaryLeft']}>💪</h3>
+                    <div className={styles['Intro__summaryRight']}>
                         <h3>Show 'em what you got!</h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ad dolor earum et expedita harum,
@@ -20,9 +20,9 @@ function Intro(props) {
                         </p>
                     </div>
                 </div>
-                <div className={styles['Intro__summary']}>
-                    <h3 className={styles['Intro__summary-left']}>🔥</h3>
-                    <div className={styles['Intro__summary-right']}>
+                <div>
+                    <h3 className={styles['Intro__summaryLeft']}>🔥</h3>
+                    <div className={styles['Intro__summaryRight']}>
                         <h3>Challenge others</h3>
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ad dolor earum et expedita harum,
