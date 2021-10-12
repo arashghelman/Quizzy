@@ -6,18 +6,19 @@
 }
 
 .Front__heading {
-    font-family: 'Quicksand', sans-serif;
-    background-image: linear-gradient(90deg, rgba(82,17,170,1) 16%, rgba(147,35,165,1) 56%, rgba(240,66,158,1) 83%);
+    background-color: #6617cb;
+    background-image: linear-gradient(90deg, #6617cb 0%, #cb218e 74%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-family: 'Quicksand', sans-serif;
     font-size: 3rem;
     line-height: 1.5em;
 }
 
-.Front__intro-row {
+.Front__introRow {
     margin-top: 2.4em;
 }
 
-.Front__subjects-row {
+.Front__subjectsRow {
     margin-top: 1.2em;
 }
