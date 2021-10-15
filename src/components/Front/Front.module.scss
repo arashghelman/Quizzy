@@ -1,0 +1,21 @@
+@import '../common/styles.scss';
+
+.Front {
+    display: flex;
+    flex-flow: column;
+
+    &__heading {
+        background-color: #6617cb;
+        background-image: linear-gradient(90deg, #6617cb 0%, #cb218e 74%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3rem;
+        line-height: 1.5em;
+        @include font_Quicksand-Bold;
+    }
+
+    &__content {
+        margin-top: 2.4em;
+    }
+}

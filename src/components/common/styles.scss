@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+
+@mixin font_Quicksand-Bold {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+}
+
+@mixin font_Quicksand-Medium {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+}
+
+@mixin font_Raleway-Regular {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+}
+
+@mixin font_Raleway-Medium {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
+}

@@ -1,0 +1,36 @@
+@import '../styles.scss';
+
+.FancyButton {
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+    font-size: 1.1rem;
+    padding: 1em 2em;
+
+    @include font_Quicksand-Bold;
+
+    &:hover {
+        background-position: left;
+    }
+
+    &_typePrimary {
+        background: linear-gradient(to left, #67cfb8 50%, #203793 50%) right;
+        background-size: 200%;
+        color: #1c043f;
+    
+        &:hover {
+            color: #67cfb8;
+        }
+    }
+
+    &_typeSecondary {
+        background: linear-gradient(to left, white 50%, #bd2670 50%) right;
+        background-size: 200%;
+        color: #bd2670;
+    
+        &:hover {
+            color: white;
+        }
+    }
+}
