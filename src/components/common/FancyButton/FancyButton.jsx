@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './FancyButton.module.css';
+import styles from './FancyButton.module.scss';
 
 function FancyButton(props) {
     const {children, type, onButtonClicked} = props;

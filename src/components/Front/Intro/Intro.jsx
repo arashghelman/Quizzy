@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './Intro.module.css';
+import styles from './Intro.module.scss';
 
 function Intro(props) {
     const { actions } = props;
     
     return (
-        <>
+        <div className={styles['Intro']}>
             <div className={styles['Intro__actionsRow']}>
                 { actions }
             </div>
@@ -31,7 +31,7 @@ function Intro(props) {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
