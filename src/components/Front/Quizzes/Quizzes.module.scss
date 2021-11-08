@@ -1,0 +1,84 @@
+@import '../../common/styles.scss';
+
+.Quizzes {
+    &__heading {
+        background-color: #6617cb;
+        background-image: linear-gradient(90deg, #6617cb 0%, #cb218e 70%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-block: 0 2.6em;
+        @include font_Quicksand-Bold;
+    }
+
+    &__collection {
+        display: grid;
+        gap: 3em;
+        grid-template-columns: repeat(2, 1fr);
+        padding-inline: 9em;
+    }
+
+    &__collectionItem {
+        display: flex;
+        flex-flow: column;
+        background: #2c1052;
+        border-radius: 20px;
+        padding: 2em;
+
+        &Header {
+            color: #bd2670;
+            @include font_Quicksand-Bold; 
+
+            h2 {
+                margin-block: 0;
+            }
+        }
+
+        &Meta {
+            display: flex;
+            flex-flow: row;
+            justify-content: space-evenly;
+            color: white;
+            margin-block: 2.2em;
+            @include font_Quicksand-Medium;
+
+            & > div {
+                display: flex;
+                align-items: center;
+
+                span:first-child {
+                    font-size: 2rem;
+                }
+
+                span:nth-child(2) {
+                    font-size: 1.1rem;
+                    margin-left: 0.7em;
+                }
+            }
+
+            & > div:nth-child(2) {
+                border: 1px dashed #bd2670;
+            }
+        }
+
+        &Body {
+            color: #df2c83;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            padding-inline: 1.6em;
+            line-height: 2em;
+            text-align: left;
+            box-shadow: inset 0 0 38px -4px rgba(0,0,0,0.55);
+            @include font_Raleway-Medium;
+        }
+
+        &Footer {
+            margin-top: 2em;
+            text-align: right;
+
+            & > button {
+                font-size: 0.95rem;
+            }
+        }
+    }
+}

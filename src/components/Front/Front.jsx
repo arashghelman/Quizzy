@@ -85,6 +85,7 @@ function Front() {
             <div className={styles['Front__content']}>
                 { isStarted ? <Subjects data={subjectsData} /> : <Intro actions={actions} /> }
             </div>
+            <Quizzes />
         </div>
     )
 }

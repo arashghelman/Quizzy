@@ -5,7 +5,7 @@
     border: none;
     cursor: pointer;
     transition: 0.3s ease-out;
-    font-size: 1.1rem;
+    font-size: 1rem;
     padding: 1em 2em;
 
     @include font_Quicksand-Bold;
@@ -18,7 +18,6 @@
         padding: 0.7em 1.7em;
         background: linear-gradient(to left, #67cfb8 50%, #203793 50%) right;
         background-size: 200%;
-        font-size: 1rem;
         color: #1c043f;
     
         &:hover {
@@ -30,7 +29,6 @@
         padding: 0.7em 1.7em;
         background: linear-gradient(to left, #ebebeb 50%, #e93d7c 50%) right;
         background-size: 200%;
-        font-size: 1rem;
         color: #757575;
     }
 

@@ -1,5 +1,4 @@
 import './App.css';
-import Front from './components/Front/Front';
 import QuizPanel from './components/QuizPanel/QuizPanel';
 
 function App() {
