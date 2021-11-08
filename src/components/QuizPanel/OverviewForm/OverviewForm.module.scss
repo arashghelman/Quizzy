@@ -3,7 +3,7 @@
 .Modal {
     width: 30rem;
     padding: 1.4em 1.9em;
-    border-radius: 0.5rem;
+    border-radius: $radius-small;
     background: white;
 
     &__header {
