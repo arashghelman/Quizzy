@@ -1,10 +1,10 @@
 import './App.css';
-import QuizPanel from './components/QuizPanel/QuizPanel';
+import QuizCreator from './components/QuizCreator/QuizCreator';
 
 function App() {
   return (
     <div className="App">
-      <QuizPanel />
+      <QuizCreator />
     </div>
   );
 }

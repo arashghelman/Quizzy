@@ -1,11 +1,14 @@
 import React from 'react';
-import styles from './FancyButton.module.scss';
+import './FancyButton.css';
 
-function FancyButton(props) {
-    const {children, type, onButtonClicked} = props;
-    
+function FancyButton({custom, children, type, onButtonClicked}) {
+
     return (
-      <button className={`${styles[`FancyButton`]} ${styles[`FancyButton_type${type}`]}`} 
+      <button className={`py-2 px-6 rounded-3xl font-quicksand 
+                        font-bold cursor-pointer
+                        transition-all duration-300 ease-out
+                        ${custom}
+                        button-${type}`}
               onClick={onButtonClicked}>
           {children}
       </button>  
