@@ -1,0 +1,23 @@
+button:hover {
+    background-position: left;
+}
+
+.button-submit {
+    background: linear-gradient(to left, #67cfb8 50%, #203793 50%) right;
+    background-size: 200%;
+    color: #1c043f;
+}
+
+.button-submit:hover {
+    color: #67cfb8;
+}
+
+.button-cancel {
+    background: linear-gradient(to left, #ebebeb 50%, #e93d7c 50%) right;
+    background-size: 200%;
+    color: #757575;
+}
+
+.button-cancel:hover {
+    color: white;
+}
