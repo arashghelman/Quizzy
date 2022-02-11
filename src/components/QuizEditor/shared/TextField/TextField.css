@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .TextInput:not(:placeholder-shown) ~ .TextLabel {
+    @apply transform z-0 scale-90 -translate-y-8 -translate-x-3;
+  }
+}
