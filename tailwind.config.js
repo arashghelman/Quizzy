@@ -1,33 +1,23 @@
 module.exports = {
-  mode: 'jit',
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  // places where tailwind classes are used.
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      borderWidth: {
+        1: "1px",
+      },
       colors: {
-        black: {
-          light: '#414141'
+        turquoise: "#90d9c0",
+        orange: "#ffa607",
+        blue: {
+          DEFAULT: "#95bbea",
+          1000: "#31426b",
         },
-        gray: {
-          DEFAULT: '#ebebeb',
-          dark: '#757575',
-          'semi-dark': '#757575b0'
-        },
-        pink: {
-          hot: '#e93d7c'
-        }
       },
-      fontFamily: {
-        'quicksand': ['Quicksand', 'sans-serif'],
-        'nunito': ['Nunito', 'sans-serif']
+      zIndex: {
+        "-1": "-1",
       },
-      spacing: {
-        '120': '30rem'
-      }
     },
   },
-  variants: {
-    extend: {},
-  },
   plugins: [],
-}
+};
