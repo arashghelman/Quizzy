@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import QuizInfoCard from "./QuizInfoCard/QuizInfoCard";
 import QuizQualityCard from "./QuizQualityCard/QuizQualityCard";
-import QuestionsList from "./QuestionsList/QuestionsList";
+import List from "../shared/List";
 import EditQuizMenu from "./EditQuizMenu/EditQuizMenu";
-import QuestionModal from "./QuestionModal/QuestionModal";
 import Sidebar from "../shared/Sidebar";
 import Button from "../shared/Button";
-import QuestionCard from "./QuestionsList/QuestionCard";
+import QuestionCard from "./QuestionCard/QuestionCard";
+import Modal from "../shared/Modal";
+import QuestionForm from "./QuestionForm/QuestionForm";
 import { quizInfo, questions } from "./fakeData";
 
 export default function QuizEditor() {
@@ -43,7 +44,7 @@ export default function QuizEditor() {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-x-10 mx-32 my-10">
+    <div className="grid grid-cols-3 gap-x-10">
       <div className="col-span-2">
         <QuizInfoCard data={quizInfo} onClickEdit={handleClickEditQuiz} />
       </div>
@@ -51,7 +52,11 @@ export default function QuizEditor() {
         <QuizQualityCard status={quizStatus} />
       </div>
       <div className="col-span-3">
-        <QuestionsList>
+        <List
+          heading="Quizzes"
+          subHeading="List of questions in my quiz"
+          gap="gap-x-8 gap-y-7"
+        >
           {questions.map((x, i) => (
             <QuestionCard
               key={x.id}
@@ -66,14 +71,15 @@ export default function QuizEditor() {
             custom="bg-gray-50 rounded-md text-3xl"
             onClick={handleClickAddQuestion}
           />
-        </QuestionsList>
+        </List>
       </div>
-      <QuestionModal
+      <Modal
         title={questionModalStatus.title}
-        data={questionModalStatus.data}
         closed={questionModalStatus.isClosed}
         onClickClose={handleClickCloseQuestionModal}
-      />
+      >
+        <QuestionForm data={questionModalStatus.data} />
+      </Modal>
       <Sidebar closed={isEditQuizMenuClosed}>
         <EditQuizMenu
           data={quizInfo}

@@ -2,6 +2,7 @@ import React from "react";
 
 export default function Button({
   children,
+  type,
   icon,
   variant = "primary",
   custom,
@@ -21,9 +22,14 @@ export default function Button({
       "add",
       "border-1 border-dashed border-gray-300 text-gray-300 ri-add-line hover:border-blue-400 hover:text-blue-400",
     ],
+    [
+      "greenish",
+      "border-none text-white bg-emerald-400 rounded-md font-semibold py-2 text-sm hover:bg-emerald-500",
+    ],
   ]);
   return (
     <button
+      type={type}
       className={`flex justify-center items-center gap-x-1 ${variants.get(
         variant
       )} ${custom}`}

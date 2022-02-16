@@ -1,15 +1,15 @@
 import { React, useState } from "react";
 import { quizSubjects } from "../fakeData";
-import TextField from "../shared/TextField/TextField";
+import TextField from "../../shared/TextField/TextField";
 import ToggleSwitch from "./ToggleSwitch";
-import QuizSubjectsList from "../shared/QuizSubjectsList";
+import QuizSubjectsList from "../../shared/QuizSubjectsList";
 import MenuPage from "./MenuPage";
 import MenuItem from "./MenuItem";
 import SecondaryMenuItem from "./SecondaryMenuItem";
 import SubjectsSelection from "./SubjectsSelection";
 import GradesSelection from "./GradesSelection";
 import Button from "../../shared/Button";
-import QuizGrades from "../shared/QuizGrades";
+import QuizGrades from "../../shared/QuizGrades";
 
 export default function EditQuizMenu({ data, onClickClose }) {
   const { name, isPublic, subjects, grade, description, thumbnail } = data;
@@ -30,6 +30,7 @@ export default function EditQuizMenu({ data, onClickClose }) {
         break;
 
       case "delete":
+        setMenuPage({ title: "Delete Quiz", content: <div></div> });
         break;
 
       default:
@@ -43,7 +44,7 @@ export default function EditQuizMenu({ data, onClickClose }) {
 
   return (
     <form
-      className={`relative transform ${
+      className={`relative w-full h-full transform ${
         menuPage.content ? "-translate-x-full" : "-translate-x-0"
       } transition duration-100`}
       autoComplete="off"

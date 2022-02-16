@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../../shared/Button";
-import TextField from "../shared/TextField/TextField";
+import TextField from "../../shared/TextField/TextField";
 
 export default function OptionField({ number, correct, ...props }) {
   return (

@@ -1,7 +1,8 @@
 import React from "react";
+import EditText from "./EditText";
 
 export default function QuizSubjectsList({ data, custom }) {
-  return (
+  return data ? (
     <ul className={custom}>
       {data.map((x) => (
         <li
@@ -12,5 +13,7 @@ export default function QuizSubjectsList({ data, custom }) {
         </li>
       ))}
     </ul>
+  ) : (
+    <EditText>Click here to add subjects</EditText>
   );
 }
