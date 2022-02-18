@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../../supabaseClient";
 import QuizInfoCard from "./QuizInfoCard/QuizInfoCard";
 import QuizQualityCard from "./QuizQualityCard/QuizQualityCard";
 import List from "../shared/List";
@@ -8,45 +9,91 @@ import Button from "../shared/Button";
 import QuestionCard from "./QuestionCard/QuestionCard";
 import Modal from "../shared/Modal";
 import QuestionForm from "./QuestionForm/QuestionForm";
-import { quizInfo, questions } from "./fakeData";
+import Spinner from "../shared/Spinner/Spinner";
 
 export default function QuizEditor() {
-  const [isEditQuizMenuClosed, setIsEditQuizMenuClosed] = useState(true);
-  const handleClickEditQuiz = () => setIsEditQuizMenuClosed(false);
-  const handleClickCloseEditQuizMenu = () => setIsEditQuizMenuClosed(true);
+  const [quiz, setQuiz] = useState({});
 
-  const [questionModalStatus, setQuestionModalStatus] = useState({
-    title: "",
-    data: null,
-    isClosed: true,
-  });
+  useEffect(() => {
+    async function fetchData() {
+      const { data, error } = await supabase
+        .from("quizzes")
+        .select(
+          `quizId:quiz_id,name,isPublic:is_public,
+        thumbnailUrl:thumbnail_url,description,subjects(subjectId:subject_id,name),
+        minGrade:min_grade_id(gradeId:grade_id,name),
+        maxGrade:max_grade_id(gradeId:grade_id,name)`
+        )
+        .eq("quiz_id", "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f")
+        .single();
+
+      setQuiz(data);
+    }
+
+    fetchData();
+  }, []);
+
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data, error } = await supabase
+        .from("quiz_questions")
+        .select("quizId:quiz_id,questionId:question_id,title,options")
+        .eq("quiz_id", "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f");
+
+      const updatedData = data.map((x) => ({
+        ...x,
+        options: x.options.map((o) => ({
+          value: o.value,
+          isCorrect: o.is_correct,
+          optionId: o.option_id,
+        })),
+      }));
+
+      setQuestions(updatedData);
+    }
+
+    fetchData();
+  }, []);
+
+  const [isMenuClosed, setIsMenuClosed] = useState(true);
+
+  const handleClickEditQuiz = () => setIsMenuClosed(false);
+
+  const handleClickCloseMenu = () => setIsMenuClosed(true);
+
+  const [modal, setModal] = useState({ title: "", data: null, isClosed: true });
+
   const handleClickAddQuestion = () =>
-    setQuestionModalStatus({
+    setModal((current) => ({
+      ...current,
       title: "Add question",
-      data: null,
       isClosed: false,
-    });
+    }));
+
   const handleClickEditQuestion = (id) =>
-    setQuestionModalStatus({
+    setModal({
       title: "Edit question",
-      data: questions.find((x) => x.id === id),
+      data: questions.find((x) => x.questionId === id),
       isClosed: false,
     });
-  const handleClickCloseQuestionModal = () =>
-    setQuestionModalStatus({ title: "", data: null, isClosed: true });
+
+  const handleClickCloseModal = () =>
+    setModal((current) => ({ ...current, data: null, isClosed: true }));
 
   const quizStatus = {
-    hasName: quizInfo.name != null,
-    hasThumbnail: quizInfo.thumbnail != null,
-    hasGrades: quizInfo.grade != null,
-    hasDescription: quizInfo.description != null,
+    hasName: quiz.name != null,
+    hasThumbnail: quiz.thumbnailUrl != null,
+    hasGrades: quiz.maxGrade != null && quiz.minGrade != null,
+    hasDescription: quiz.description != null,
     hasEnoughQuestions: questions.length >= 4,
   };
 
   return (
     <div className="grid grid-cols-3 gap-x-10">
       <div className="col-span-2">
-        <QuizInfoCard data={quizInfo} onClickEdit={handleClickEditQuiz} />
+        <QuizInfoCard data={quiz} onClickEdit={handleClickEditQuiz} />
       </div>
       <div className="col-span-1">
         <QuizQualityCard status={quizStatus} />
@@ -59,10 +106,10 @@ export default function QuizEditor() {
         >
           {questions.map((x, i) => (
             <QuestionCard
-              key={x.id}
+              key={x.questionId}
               number={++i}
               data={x}
-              onClickEdit={() => handleClickEditQuestion(x.id)}
+              onClickEdit={() => handleClickEditQuestion(x.questionId)}
             />
           ))}
           <Button
@@ -73,19 +120,19 @@ export default function QuizEditor() {
           />
         </List>
       </div>
-      <Modal
-        title={questionModalStatus.title}
-        closed={questionModalStatus.isClosed}
-        onClickClose={handleClickCloseQuestionModal}
-      >
-        <QuestionForm data={questionModalStatus.data} />
-      </Modal>
-      <Sidebar closed={isEditQuizMenuClosed}>
-        <EditQuizMenu
-          data={quizInfo}
-          onClickClose={handleClickCloseEditQuizMenu}
-        />
-      </Sidebar>
+      {modal.isClosed ? null : (
+        <Modal title={modal.title} onClickClose={handleClickCloseModal}>
+          <QuestionForm data={modal.data} />
+        </Modal>
+      )}
+      {isMenuClosed ? null : (
+        <Sidebar>
+          <EditQuizMenu data={quiz} onClickClose={handleClickCloseMenu} />
+        </Sidebar>
+      )}
     </div>
+    // <div className="flex justify-center h-2/3 items-center">
+    //   <Spinner />
+    // </div>
   );
 }

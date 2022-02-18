@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from "../../../supabaseClient";
 
-export default function SubjectsSelection({ data }) {
-  const [subjects, setSubjects] = useState(
-    data.map((x) => ({ ...x, isSelected: false }))
-  );
+export default function SubjectsSelection() {
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data, error } = await supabase
+        .from("subjects")
+        .select("subjectId:subject_id,name");
+
+      const updatedData = data.map((x) => ({ ...x, isSelected: false }));
+      setSubjects(updatedData);
+    }
+
+    fetchData();
+  }, []);
 
   const handleClickSubject = (id) => {
     const updatedSubjects = [...subjects];
-    const selectedSubject = updatedSubjects.find((x) => x.id === id);
+    const selectedSubject = updatedSubjects.find((x) => x.subjectId === id);
     selectedSubject.isSelected = !selectedSubject.isSelected;
     setSubjects(updatedSubjects);
   };
@@ -18,13 +30,12 @@ export default function SubjectsSelection({ data }) {
         Choose relevant subjects for better content suggestion.
       </p>
       <ul>
-        {subjects.map((x, i) => (
-          <SubjectItem
-            key={x.id}
+        {subjects.map((x) => (
+          <Subject
+            key={x.subjectId}
             name={x.name}
-            first={i === 0}
             selected={x.isSelected}
-            onClick={() => handleClickSubject(x.id)}
+            onClick={() => handleClickSubject(x.subjectId)}
           />
         ))}
       </ul>
@@ -32,11 +43,10 @@ export default function SubjectsSelection({ data }) {
   );
 }
 
-function SubjectItem({ name, first, selected, onClick }) {
+function Subject({ name, selected, onClick }) {
   return (
     <li
-      className={`pl-8 hover:bg-gray-100 active:bg-gray-200 cursor-pointer 
-            ${first && "border-t-1"}`}
+      className="pl-8 hover:bg-gray-100 active:bg-gray-200 cursor-pointer first:border-t-1"
       onClick={onClick}
     >
       <div className="py-6 flex justify-between text-left text-blue-1000">

@@ -1,8 +1,7 @@
 import { React, useState } from "react";
-import { quizSubjects } from "../fakeData";
 import TextField from "../../shared/TextField/TextField";
 import ToggleSwitch from "./ToggleSwitch";
-import QuizSubjectsList from "../../shared/QuizSubjectsList";
+import QuizSubjects from "../../shared/QuizSubjects";
 import MenuPage from "./MenuPage";
 import MenuItem from "./MenuItem";
 import SecondaryMenuItem from "./SecondaryMenuItem";
@@ -12,7 +11,16 @@ import Button from "../../shared/Button";
 import QuizGrades from "../../shared/QuizGrades";
 
 export default function EditQuizMenu({ data, onClickClose }) {
-  const { name, isPublic, subjects, grade, description, thumbnail } = data;
+  const { minGrade, maxGrade, thumbnailUrl } = data;
+
+  const [name, setName] = useState(data.name);
+  const [description, setDescription] = useState(data.description);
+  const [isPublic, setIsPublic] = useState(data.isPublic);
+  const [subjects, setSubjects] = useState(data.subjects);
+
+  const handleNameChange = (event) => setName(event.target.value);
+  const handleDescriptionChange = (event) => setDescription(event.target.value);
+  const handleIsPublicChange = () => setIsPublic((current) => !current);
 
   const [menuPage, setMenuPage] = useState({ title: "", content: null });
 
@@ -21,7 +29,7 @@ export default function EditQuizMenu({ data, onClickClose }) {
       case "subjects":
         setMenuPage({
           title: "Subjects",
-          content: <SubjectsSelection data={quizSubjects} />,
+          content: <SubjectsSelection />,
         });
         break;
 
@@ -60,16 +68,23 @@ export default function EditQuizMenu({ data, onClickClose }) {
           />
         }
       >
-        <div className="relative filter hover:brightness-50 cursor-pointer">
-          <img src={thumbnail} alt="thumnbail" />
+        <div className="flex cursor-pointer">
+          <img src={thumbnailUrl} alt="thumnbail" />
+          <div className="brightness-50 h-full w-full"></div>
         </div>
         <div className="flex flex-col gap-y-7 pt-9">
           <div className="flex flex-col gap-y-8 mx-6">
-            <TextField id="name" label="Quiz name" value={name} />
+            <TextField
+              id="name"
+              label="Quiz name"
+              value={name}
+              onChange={handleNameChange}
+            />
             <TextField
               id="description"
               label="Description"
               value={description}
+              onChange={handleDescriptionChange}
             />
           </div>
           <ul>
@@ -79,19 +94,27 @@ export default function EditQuizMenu({ data, onClickClose }) {
                 <span className="text-sm text-gray-400">
                   {isPublic ? "Public" : "Private"}
                 </span>
-                <ToggleSwitch id="visibility" />
+                <ToggleSwitch
+                  id="visibility"
+                  active={isPublic}
+                  onToggle={handleIsPublicChange}
+                />
               </div>
             </MenuItem>
             <SecondaryMenuItem id="subjects" onClick={handleMenuItemClick}>
               <span>Subjects</span>
-              <QuizSubjectsList
+              <QuizSubjects
                 data={subjects}
                 custom="flex text-sm text-gray-400"
               />
             </SecondaryMenuItem>
             <SecondaryMenuItem id="grades" onClick={handleMenuItemClick}>
               <span>Grades</span>
-              <QuizGrades data={grade} custom="text-gray-400" />
+              <QuizGrades
+                min={minGrade}
+                max={maxGrade}
+                custom="text-sm text-gray-400"
+              />
             </SecondaryMenuItem>
             <hr />
             <MenuItem id="delete" onClick={handleMenuItemClick}>

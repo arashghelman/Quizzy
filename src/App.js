@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App mx-32 my-10">
       <QuizCreator />
-      <UserProfile />
+      {/* <UserProfile /> */}
     </div>
   );
 }

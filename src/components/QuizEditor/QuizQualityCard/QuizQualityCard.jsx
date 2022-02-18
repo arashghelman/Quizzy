@@ -1,18 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import ProgressBar from "./ProgressBar";
 import TodoItem from "./TodoItem";
 
 export default function QuizQualityCard({ status }) {
-  // const [todos, setTodos] = useState(
-  //   [
-  //     "Pick a relevant name for your quiz",
-  //     "Add a quiz thumbnail",
-  //     "Add grades",
-  //     "Write a brief description about your quiz",
-  //     "Add at least 4 questions",
-  //   ].map((x) => ({ title: x, isCompleted: false }))
-  // );
-
   const todos = [
     {
       title: "Pick a relevant name for your quiz",
