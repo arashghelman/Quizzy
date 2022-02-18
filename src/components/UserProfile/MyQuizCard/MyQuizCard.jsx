@@ -1,6 +1,6 @@
 import React from "react";
 import InfoItem from "../../shared/InfoItem";
-import QuizSubjectsList from "../../shared/QuizSubjectsList";
+import QuizSubjects from "../../shared/QuizSubjects";
 import QuizGrades from "../../shared/QuizGrades";
 import Button from "../../shared/Button";
 import InfoHeading from "../../shared/InfoHeading";
@@ -18,7 +18,11 @@ export default function MyQuizCard() {
         </div>
         <div className="flex flex-col gap-6 col-span-2">
           <div className="flex items-start justify-between">
-            <InfoHeading heading="Lorem ispum" subHeading="Public" size="sm" />
+            <InfoHeading
+              heading="Lorem ispum"
+              subHeading="Public"
+              fontSize="sm"
+            />
             <div className="flex gap-3">
               <Button icon="ri-pencil-line" custom="w-7 h-7" />
               <Button icon="ri-delete-bin-line" custom="w-7 h-7" />
@@ -26,7 +30,7 @@ export default function MyQuizCard() {
           </div>
           <ul className="justify-self-end">
             <InfoItem icon="ri-book-line">
-              <QuizSubjectsList
+              <QuizSubjects
                 data={[
                   { id: "1", name: "Subject1" },
                   { id: "1", name: "Subject1" },

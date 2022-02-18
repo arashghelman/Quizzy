@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../../shared/Button";
 
 export default function QuestionCard({ number, data, onClickEdit }) {
-  const { questionTitle, options } = data;
+  const { title, options } = data;
 
   return (
     <li className="flex flex-col gap-y-6 rounded-md p-3 bg-white text-blue-1000 shadow-md">
@@ -22,13 +22,13 @@ export default function QuestionCard({ number, data, onClickEdit }) {
               <Button icon="ri-file-copy-line" custom="w-7 h-7" />
             </div>
           </div>
-          <h1 className="text-left font-medium">Q. {questionTitle}</h1>
+          <h1 className="text-left font-medium">Q. {title}</h1>
         </div>
       </div>
       <ul className="grid grid-cols-2 gap-y-7 mx-3 mb-3">
         {options.map((x) => (
           <Option
-            key={x.id}
+            key={x.optionId}
             color={`${x.isCorrect ? "bg-turquoise" : "bg-pink-400"}`}
           >
             {x.value}

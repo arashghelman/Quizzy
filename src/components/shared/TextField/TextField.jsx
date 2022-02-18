@@ -7,6 +7,7 @@ export default function TextField({
   type = "text",
   label,
   custom,
+  onChange,
   ...props
 }) {
   // focus-within is not supported in IE.
@@ -22,8 +23,10 @@ export default function TextField({
         id={id}
         name={id}
         placeholder=" "
+        pattern=".*\S+.*"
         className="block rounded-xl w-full py-4 pl-4 text-gray-700 
           bg-transparent appearance-none focus:outline-none TextInput peer"
+        onChange={onChange}
         {...props}
       />
       <label

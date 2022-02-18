@@ -1,15 +1,19 @@
 import React from "react";
 import EditText from "./EditText";
 
-export default function QuizGrades({ data, custom }) {
-  return data ? (
-    <div className={`flex gap-x-1 ${custom}`}>
-      <span>{data?.min}</span>
-      <span>-</span>
-      <span>{data?.max}</span>
-      <span>grades</span>
+export default function QuizGrades({ min, max, custom }) {
+  return (
+    <div className={custom}>
+      {min && max ? (
+        <div className="flex gap-x-1">
+          <span>{min.name}</span>
+          <span>-</span>
+          <span>{max.name}</span>
+          <span>grades</span>
+        </div>
+      ) : (
+        <EditText>Click here to add grades</EditText>
+      )}
     </div>
-  ) : (
-    <EditText>Click here to add grades</EditText>
   );
 }
