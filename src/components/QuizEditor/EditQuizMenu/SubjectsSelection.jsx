@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../supabaseClient";
 
-export default function SubjectsSelection() {
+export default function SubjectsSelection({ selectedSubjects }) {
   const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
@@ -11,11 +11,17 @@ export default function SubjectsSelection() {
         .select("subjectId:subject_id,name");
 
       const updatedData = data.map((x) => ({ ...x, isSelected: false }));
+      updatedData.forEach(
+        (x) =>
+          selectedSubjects.find((s) => s.subjectId === x.subjectId) &&
+          (x.isSelected = true)
+      );
+
       setSubjects(updatedData);
     }
 
     fetchData();
-  }, []);
+  }, [selectedSubjects]);
 
   const handleClickSubject = (id) => {
     const updatedSubjects = [...subjects];

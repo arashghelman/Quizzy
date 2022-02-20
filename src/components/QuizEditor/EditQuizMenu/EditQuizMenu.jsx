@@ -29,7 +29,7 @@ export default function EditQuizMenu({ data, onClickClose }) {
       case "subjects":
         setMenuPage({
           title: "Subjects",
-          content: <SubjectsSelection />,
+          content: <SubjectsSelection selectedSubjects={subjects} />,
         });
         break;
 
