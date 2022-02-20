@@ -1,12 +1,16 @@
 import "./App.css";
-import QuizCreator from "./components/QuizEditor/QuizEditor";
+import QuizEditor from "./components/QuizEditor/QuizEditor";
 import UserProfile from "./components/UserProfile/UserProfile";
+import QuizPlayer from "./components/QuizPlayer/QuizPlayer";
 
 function App() {
   return (
-    <div className="App mx-32 my-10">
-      <QuizCreator />
-      {/* <UserProfile /> */}
+    <div className="App py-10">
+      {/* <div className="mx-32 h-full">
+        <QuizEditor />
+        <UserProfile />
+      </div> */}
+      <QuizPlayer />
     </div>
   );
 }
