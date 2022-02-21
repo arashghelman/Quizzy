@@ -32,8 +32,8 @@ export default function TextField({
       <label
         htmlFor={id}
         className="block absolute ml-3 px-1 -z-1 bg-white duration-150 TextLabel 
-        transform peer-focus-within:z-0 peer-focus-within:scale-90 
-        peer-focus-within:-translate-y-8 peer-focus-within:-translate-x-3"
+          transform peer-focus-within:z-0 peer-focus-within:scale-90 
+          peer-focus-within:-translate-y-8 peer-focus-within:-translate-x-3"
       >
         {label}
       </label>

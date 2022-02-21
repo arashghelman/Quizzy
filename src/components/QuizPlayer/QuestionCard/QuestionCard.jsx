@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import OptionRadioButton from "./OptionRadioButton";
+import RadioButton from "./RadioButton";
 import Button from "../../shared/Button";
 
 export default function QuestionCard() {
   const [isFlipped, setIsFlipped] = useState(false);
+
+  const handleSubmitClick = () => setIsFlipped(true);
 
   const successMessages = ["Brilliant!", "Well done.", "Good job!"];
   const randomSuccessMessgae =
@@ -33,15 +35,15 @@ export default function QuestionCard() {
             className="grid grid-rows-4 auto-rows-fr gap-5 w-full"
           >
             <div></div>
-            <OptionRadioButton label="Option 1" />
-            <OptionRadioButton label="Option 2" />
+            <RadioButton label="Option 1" id="1" name="option" />
+            <RadioButton label="Option 2" id="2" name="option" />
           </div>
           <div className="flex justify-end w-full">
             <Button
               type="button"
               variant="greenish"
               custom="px-3"
-              onClick={() => setIsFlipped(true)}
+              onClick={handleSubmitClick}
             >
               Submit
             </Button>
@@ -69,7 +71,7 @@ export default function QuestionCard() {
 function Side({ back, children }) {
   return (
     <div
-      className="absolute w-full h-full flex flex-col justify-center items-center gap-8 px-8 rounded-md bg-white"
+      className="absolute w-full h-full flex flex-col justify-center items-center gap-8 p-8 rounded-md bg-white"
       style={{
         backfaceVisibility: "hidden",
         transform: back && "rotateY(180deg)",
