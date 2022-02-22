@@ -19,7 +19,6 @@ export default function QuestionCard({ number, data, onClickEdit }) {
                 Edit
               </Button>
               <Button icon="ri-delete-bin-line" custom="w-7 h-7" />
-              <Button icon="ri-file-copy-line" custom="w-7 h-7" />
             </div>
           </div>
           <h1 className="text-left font-medium">Q. {title}</h1>

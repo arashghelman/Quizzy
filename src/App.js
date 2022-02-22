@@ -6,11 +6,11 @@ import QuizPlayer from "./components/QuizPlayer/QuizPlayer";
 function App() {
   return (
     <div className="App py-10">
-      {/* <div className="mx-32 h-full">
+      <div className="mx-32 h-full">
         <QuizEditor />
-        <UserProfile />
-      </div> */}
-      <QuizPlayer />
+        {/* <UserProfile /> */}
+      </div>
+      {/* <QuizPlayer /> */}
     </div>
   );
 }

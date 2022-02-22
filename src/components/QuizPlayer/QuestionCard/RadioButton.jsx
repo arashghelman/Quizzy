@@ -15,7 +15,7 @@ export default function RadioButton({ label, id, name }) {
         text-gray-400 group-hover:text-blue-500
         peer-checked:-m-px peer-checked:border-2
         peer-checked:border-blue-400 peer-checked:text-blue-500
-        peer-checked:font-medium"
+        peer-checked:font-medium transform duration-100"
       >
         {label}
       </div>
