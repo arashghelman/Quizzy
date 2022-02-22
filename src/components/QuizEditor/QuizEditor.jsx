@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { supabase } from "../../supabaseClient";
-import { useSupabase } from "../../hooks/useSupabase";
+import { useAPI } from "../../hooks/useAPI";
 import QuizInfoCard from "./QuizInfoCard/QuizInfoCard";
 import QuizQualityCard from "./QuizQualityCard/QuizQualityCard";
 import List from "../shared/List";
@@ -17,7 +17,7 @@ export default function QuizEditor() {
     data: quiz,
     error: quizError,
     isLoading: isQuizLoading,
-  } = useSupabase(
+  } = useAPI(
     async () =>
       await supabase
         .from("quizzes")
@@ -35,7 +35,7 @@ export default function QuizEditor() {
     data: questions,
     error: questionsError,
     isLoading: areQuestionsLoading,
-  } = useSupabase(
+  } = useAPI(
     async () =>
       await supabase
         .from("quiz_questions")
@@ -44,27 +44,22 @@ export default function QuizEditor() {
   );
 
   const [isMenuClosed, setIsMenuClosed] = useState(true);
-
   const handleClickEditQuiz = () => setIsMenuClosed(false);
-
   const handleClickCloseMenu = () => setIsMenuClosed(true);
 
   const [modal, setModal] = useState({ title: "", data: null, isClosed: true });
-
   const handleClickAddQuestion = () =>
     setModal((current) => ({
       ...current,
       title: "Add question",
       isClosed: false,
     }));
-
   const handleClickEditQuestion = (id) =>
     setModal({
       title: "Edit question",
       data: questions.find((x) => x.questionId === id),
       isClosed: false,
     });
-
   const handleClickCloseModal = () =>
     setModal((current) => ({ ...current, data: null, isClosed: true }));
 
@@ -78,11 +73,7 @@ export default function QuizEditor() {
 
   return (
     <>
-      {isQuizLoading && areQuestionsLoading && (
-        <div className="flex justify-center items-center h-full">
-          <Spinner />
-        </div>
-      )}
+      {isQuizLoading && areQuestionsLoading && <Spinner />}
       {quiz && questions && (
         <div className="grid grid-cols-3 gap-x-10">
           <div className="col-span-2">

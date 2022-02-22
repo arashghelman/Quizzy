@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export const useSupabase = (callback) => {
+export const useAPI = (callback) => {
   const callbackRef = useRef(callback);
 
   const [fetchStatus, setFetchStatus] = useState({
