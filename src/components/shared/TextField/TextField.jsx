@@ -1,33 +1,24 @@
-import { React } from "react";
+import { React, forwardRef } from "react";
 import "./TextField.css";
 
-export default function TextField({
-  children,
-  id,
-  type = "text",
-  label,
-  custom,
-  onChange,
-  ...props
-}) {
-  // focus-within is not supported in IE.
-  return (
+const TextField = forwardRef(
+  ({ children, type = "text", id, name, label, value }, ref) => (
+    // focus-within is not supported in IE.
     <div
-      className={`relative flex items-center rounded-xl z-10
+      className="relative flex items-center rounded-xl z-10
         border-1 focus-within:border-2 focus-within:-m-px
         border-gray-300 hover:border-blue-400 focus-within:border-blue-400 
-        text-gray-400 hover:text-blue-500 focus-within:text-blue-500 ${custom}`}
+        text-gray-400 hover:text-blue-500 focus-within:text-blue-500"
     >
       <input
         type={type}
         id={id}
-        name={id}
+        name={name}
+        defaultValue={value}
         placeholder=" "
-        pattern=".*\S+.*"
+        ref={ref}
         className="block rounded-xl w-full py-4 pl-4 text-gray-700 
           bg-transparent appearance-none focus:outline-none TextInput peer"
-        onChange={onChange}
-        {...props}
       />
       <label
         htmlFor={id}
@@ -39,5 +30,7 @@ export default function TextField({
       </label>
       {children}
     </div>
-  );
-}
+  )
+);
+
+export default TextField;

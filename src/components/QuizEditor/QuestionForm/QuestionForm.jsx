@@ -1,95 +1,77 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import Form from "../../shared/Form";
+import { useForm, useFieldArray } from "react-hook-form";
 import TextField from "../../shared/TextField/TextField";
-import RadioInput from "./RadioInput";
+import RadioButton from "./RadioButton";
 import Button from "../../shared/Button";
 
 export default function QuestionForm({ data }) {
-  const [title, setTitle] = useState("");
-  const [options, setOptions] = useState([]);
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: "",
+      options: [],
+    },
+  });
 
-  useEffect(() => {
-    if (data) {
-      setTitle(data.title);
-      setOptions(data.options);
-    } else {
-      setTitle("");
-      setOptions([]);
-    }
-  }, [data]);
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "options",
+  });
 
-  const handleTitleChange = (event) => setTitle(event.target.value);
+  useEffect(() => data && reset(data), [data, reset]);
 
-  const handleOptionCheck = (id) => {
-    const updatedOptions = options.map((x) => ({ ...x }));
-    updatedOptions.forEach((x) => (x.isCorrect = false));
-    const checkedOption = updatedOptions.find((x) => x.optionId === id);
-    checkedOption.isCorrect = true;
-    setOptions(updatedOptions);
-  };
+  const handleRemoveClick = (index) => remove(index);
 
-  const handleOptionValueChange = (event, id) => {
-    const updatedOptions = options.map((x) => ({ ...x }));
-    const changedOption = updatedOptions.find((x) => x.optionId === id);
-    changedOption.value = event.target.value;
-    setOptions(updatedOptions);
-  };
+  const handleAddClick = () =>
+    append({ optionId: uuidv4(), value: "", isCorrect: false }, true);
 
-  const handleAddClick = () => {
-    const updatedOptions = options.map((x) => ({ ...x }));
-    updatedOptions.push({ value: "", isCorrect: false, optionId: uuidv4() });
-    setOptions(updatedOptions);
-  };
+  const onSubmit = (data) => console.log(data);
 
-  const handleRemoveClick = (id) => {
-    const clonedOptions = options.map((x) => ({ ...x }));
-    const updatedOptions = clonedOptions.filter((x) => x.optionId !== id);
-    setOptions(updatedOptions.filter((x) => x.optionId !== id));
-  };
-
-  const handleSaveClick = (event) => {
-    console.log({ title, options });
-  };
+  const formFields = fields.map((field, index) => (
+    <TextField
+      key={field.id}
+      id={`options.${index}.id`}
+      label={`Option ${index + 1}`}
+      value={field.value}
+      {...register(`options.${index}.value`, {
+        required: true,
+        maxLength: 100,
+      })}
+    >
+      <div className="flex items-center justify-center gap-x-5 px-4">
+        <RadioButton
+          id={`options.${index}.id`}
+          value={field.value}
+          {...register("options", { required: true })}
+        />
+        <Button
+          type="button"
+          icon="ri-delete-bin-line"
+          custom="w-6 h-6 border-none text-xl text-red-400"
+          onClick={() => handleRemoveClick(index)}
+        />
+      </div>
+    </TextField>
+  ));
 
   return (
-    <Form onSubmit={(event) => handleSaveClick(event)}>
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         id="title"
         label="Title"
-        value={title}
-        required
-        onChange={(event) => handleTitleChange(event)}
+        {...register("title", { required: true, maxLength: 100 })}
       />
       <div className="flex flex-col gap-6">
         <h2 className="text-left text-blue-1000 font-medium mx-2">Options</h2>
-        <div role="list" className="grid grid-cols-1 gap-6 auto-rows-fr">
-          {options.map((x, i) => (
-            <TextField
-              key={x.optionId}
-              id="option"
-              label={`Option ${++i}`}
-              value={x.value}
-              required
-              onChange={(event) => handleOptionValueChange(event, x.optionId)}
-            >
-              <div className="flex items-center justify-center gap-x-5 px-4">
-                <RadioInput
-                  name="option"
-                  checked={x.isCorrect}
-                  required
-                  onChange={() => handleOptionCheck(x.optionId)}
-                />
-                <Button
-                  type="button"
-                  icon="ri-delete-bin-line"
-                  custom="w-6 h-6 border-none text-xl text-red-400"
-                  onClick={() => handleRemoveClick(x.optionId)}
-                />
-              </div>
-            </TextField>
-          ))}
-          {options.length < 4 && (
+        <fieldset className="grid grid-cols-1 gap-6 auto-rows-fr">
+          {formFields}
+          {fields.length < 4 && (
             <Button
               type="button"
               variant="add"
@@ -97,8 +79,18 @@ export default function QuestionForm({ data }) {
               onClick={handleAddClick}
             />
           )}
-        </div>
+        </fieldset>
       </div>
-    </Form>
+      <div className="mb-2 self-end">
+        <Button
+          type="submit"
+          variant="greenish"
+          custom="p-10"
+          onClick={handleSubmit(onSubmit)}
+        >
+          Save
+        </Button>
+      </div>
+    </form>
   );
 }
