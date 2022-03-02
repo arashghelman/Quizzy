@@ -1,22 +1,21 @@
 import React from "react";
-import ProgressBar from "../../shared/ProgressBar";
-import TodoItem from "./TodoItem";
+import ProgressBar from "../shared/ProgressBar";
 
-export default function QuizQualityCard({ status }) {
+const QuizQualityCard = ({ quality }) => {
   const todos = [
     {
       title: "Pick a relevant name for your quiz",
-      isCompleted: status.hasName,
+      isCompleted: quality.hasName,
     },
-    { title: "Add a quiz thumbnail", isCompleted: status.hasThumbnail },
-    { title: "Add grades", isCompleted: status.hasGrades },
+    { title: "Add a quiz thumbnail", isCompleted: quality.hasThumbnail },
+    { title: "Add grades", isCompleted: quality.hasGrades },
     {
       title: "Write a brief description about your quiz",
-      isCompleted: status.hasDescription,
+      isCompleted: quality.hasDescription,
     },
     {
       title: "Add at least 4 questions",
-      isCompleted: status.hasEnoughQuestions,
+      isCompleted: quality.hasEnoughQuestions,
     },
   ];
 
@@ -78,4 +77,26 @@ export default function QuizQualityCard({ status }) {
       </ul>
     </section>
   );
-}
+};
+
+export default QuizQualityCard;
+
+const TodoItem = ({ children, last, completed }) => (
+  <li className="group cursor-default">
+    <div className="flex justify-between items-center gap-x-2">
+      <span
+        className={`text-sm ${
+          completed && "opacity-50 group-hover:opacity-70"
+        }`}
+      >
+        {children}
+      </span>
+      {completed && (
+        <span className="font-bold text-sm text-green-500 opacity-50 group-hover:opacity-70">
+          &#10003;
+        </span>
+      )}
+    </div>
+    {!last && <hr className="mt-3" />}
+  </li>
+);

@@ -2,7 +2,7 @@ import { React, forwardRef } from "react";
 import "./TextField.css";
 
 const TextField = forwardRef(
-  ({ children, type = "text", id, name, label, value }, ref) => (
+  ({ children, type = "text", id, label, ...rest }, ref) => (
     // focus-within is not supported in IE.
     <div
       className="relative flex items-center rounded-xl z-10
@@ -13,10 +13,9 @@ const TextField = forwardRef(
       <input
         type={type}
         id={id}
-        name={name}
-        defaultValue={value}
         placeholder=" "
         ref={ref}
+        {...rest}
         className="block rounded-xl w-full py-4 pl-4 text-gray-700 
           bg-transparent appearance-none focus:outline-none TextInput peer"
       />

@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { useAPI } from "../../hooks/useAPI";
-import QuizInfoCard from "./QuizInfoCard/QuizInfoCard";
-import QuizQualityCard from "./QuizQualityCard/QuizQualityCard";
-import List from "../shared/List";
-import EditQuizMenu from "./EditQuizMenu/EditQuizMenu";
-import Sidebar from "../shared/Sidebar";
-import Button from "../shared/Button";
-import QuestionCard from "./QuestionCard/QuestionCard";
+import QuizInfoCard from "./QuizInfoCard";
+import QuizQualityCard from "./QuizQualityCard";
+import QuestionsList from "./QuestionsList";
 import Modal from "../shared/Modal";
-import QuestionForm from "./QuestionForm/QuestionForm";
+import QuizForm from "./QuizForm";
+import QuestionForm from "./QuestionForm";
 import Spinner from "../shared/Spinner/Spinner";
 
 export default function QuizEditor() {
@@ -43,27 +40,53 @@ export default function QuizEditor() {
         .eq("quiz_id", "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f")
   );
 
-  const [isMenuClosed, setIsMenuClosed] = useState(true);
-  const handleClickEditQuiz = () => setIsMenuClosed(false);
-  const handleClickCloseMenu = () => setIsMenuClosed(true);
+  const [modalStatus, setModalStatus] = useState({
+    title: "",
+    content: null,
+    isActive: false,
+  });
 
-  const [modal, setModal] = useState({ title: "", data: null, isClosed: true });
-  const handleClickAddQuestion = () =>
-    setModal((current) => ({
-      ...current,
-      title: "Add question",
-      isClosed: false,
-    }));
-  const handleClickEditQuestion = (id) =>
-    setModal({
-      title: "Edit question",
-      data: questions.find((x) => x.questionId === id),
-      isClosed: false,
+  const quizFormDefaultValues = quiz && {
+    quizId: quiz.quizId,
+    name: quiz.name,
+    isPublic: quiz.isPublic,
+    description: quiz.description,
+    subjects: quiz.subjects.map((subject) => subject.subjectId),
+    minGradeId: quiz.minGrade.gradeId,
+    maxGradeId: quiz.maxGrade.gradeId,
+  };
+
+  const handleQuizEdit = () =>
+    setModalStatus({
+      title: "Edit quiz",
+      content: <QuizForm defaultValues={quizFormDefaultValues} />,
+      isActive: true,
     });
-  const handleClickCloseModal = () =>
-    setModal((current) => ({ ...current, data: null, isClosed: true }));
 
-  const quizStatus = {
+  const handleQuestionAdd = () =>
+    setModalStatus({
+      title: "Add question",
+      content: <QuestionForm defaultValues={null} />,
+      isActive: true,
+    });
+
+  const handleQuestionEdit = (id) =>
+    setModalStatus({
+      title: "Edit question",
+      content: (
+        <QuestionForm
+          defaultValues={questions.find(
+            (question) => question.questionId === id
+          )}
+        />
+      ),
+      isActive: true,
+    });
+
+  const handleModalClose = () =>
+    setModalStatus({ title: "", content: null, isActive: false });
+
+  const quizQuality = {
     hasName: quiz?.name != null,
     hasThumbnail: quiz?.thumbnailUrl != null,
     hasGrades: quiz?.maxGrade != null && quiz.minGrade != null,
@@ -75,44 +98,24 @@ export default function QuizEditor() {
     <>
       {isQuizLoading && areQuestionsLoading && <Spinner />}
       {quiz && questions && (
-        <div className="grid grid-cols-3 gap-x-10">
+        <div className="grid grid-cols-3 gap-x-10 py-20">
           <div className="col-span-2">
-            <QuizInfoCard data={quiz} onClickEdit={handleClickEditQuiz} />
+            <QuizInfoCard info={quiz} onEdit={handleQuizEdit} />
           </div>
           <div className="col-span-1">
-            <QuizQualityCard status={quizStatus} />
+            <QuizQualityCard quality={quizQuality} />
           </div>
           <div className="col-span-3">
-            <List
-              heading="Quizzes"
-              subHeading="List of questions in my quiz"
-              gap="gap-x-8 gap-y-7"
-            >
-              {questions.map((x, i) => (
-                <QuestionCard
-                  key={x.questionId}
-                  number={++i}
-                  data={x}
-                  onClickEdit={() => handleClickEditQuestion(x.questionId)}
-                />
-              ))}
-              <Button
-                type="button"
-                variant="add"
-                custom="bg-gray-50 rounded-md text-3xl"
-                onClick={handleClickAddQuestion}
-              />
-            </List>
+            <QuestionsList
+              listData={questions}
+              onItemEdit={handleQuestionEdit}
+              onItemAdd={handleQuestionAdd}
+            />
           </div>
-          {modal.isClosed ? null : (
-            <Modal title={modal.title} onClickClose={handleClickCloseModal}>
-              <QuestionForm data={modal.data} />
+          {modalStatus.isActive && (
+            <Modal title={modalStatus.title} onClose={handleModalClose}>
+              {modalStatus.content}
             </Modal>
-          )}
-          {isMenuClosed ? null : (
-            <Sidebar>
-              <EditQuizMenu data={quiz} onClickClose={handleClickCloseMenu} />
-            </Sidebar>
           )}
         </div>
       )}
