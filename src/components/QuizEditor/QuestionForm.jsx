@@ -1,4 +1,5 @@
 import React, { useEffect, forwardRef } from "react";
+import { supabase } from "../../supabaseClient";
 import { v4 as uuidv4 } from "uuid";
 import { useForm, useFieldArray } from "react-hook-form";
 import Form from "../shared/Form";
@@ -36,7 +37,19 @@ const QuestionForm = ({ defaultValues }) => {
       })
     );
 
-  const onSubmit = (data) => console.log(data);
+  const handleFormSubmit = async (data) => {
+    const dataToSubmit = {
+      quiz_id: data.quizId,
+      title: data.title,
+      options: data.options,
+    };
+
+    data.questionId
+      ? await supabase
+          .from("quiz_questions")
+          .upsert({ ...dataToSubmit, question_id: data.questionId })
+      : await supabase.from("quiz_questions").insert([dataToSubmit]);
+  };
 
   const formFields = fields.map((field, index) => (
     <TextField
@@ -64,7 +77,7 @@ const QuestionForm = ({ defaultValues }) => {
   ));
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(handleFormSubmit)}>
       <TextField
         id="title"
         label="Title"
@@ -98,6 +111,7 @@ const RadioButton = forwardRef(
       name={name}
       value={value}
       defaultChecked={defaultChecked}
+      onChange={onChange}
       ref={ref}
       {...rest}
       className="flex items-center justify-center appearance-none cursor-pointer 
