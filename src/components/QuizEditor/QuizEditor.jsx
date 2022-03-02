@@ -66,7 +66,11 @@ export default function QuizEditor() {
   const handleQuestionAdd = () =>
     setModalStatus({
       title: "Add question",
-      content: <QuestionForm defaultValues={null} />,
+      content: (
+        <QuestionForm
+          defaultValues={{ quizId: "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f" }}
+        />
+      ),
       isActive: true,
     });
 

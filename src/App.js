@@ -7,8 +7,8 @@ function App() {
   return (
     <div className="App">
       <div className="mx-32 h-full">
-        {/* <QuizEditor /> */}
-        <UserProfile />
+        <QuizEditor />
+        {/* <UserProfile /> */}
       </div>
       {/* <QuizPlayer /> */}
     </div>
