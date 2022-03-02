@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "../../supabaseClient";
-import { useAPI } from "../../hooks/useAPI";
+import { useSelect, useFilter } from "react-supabase";
 import QuizInfoCard from "./QuizInfoCard";
 import QuizQualityCard from "./QuizQualityCard";
 import QuestionsList from "./QuestionsList";
@@ -10,35 +9,33 @@ import QuestionForm from "./QuestionForm";
 import Spinner from "../shared/Spinner/Spinner";
 
 export default function QuizEditor() {
-  const {
-    data: quiz,
-    error: quizError,
-    isLoading: isQuizLoading,
-  } = useAPI(
-    async () =>
-      await supabase
-        .from("quizzes")
-        .select(
-          `quizId:quiz_id,name,isPublic:is_public,
-          thumbnailUrl:thumbnail_url,description,subjects(subjectId:subject_id,name),
-          minGrade:min_grade_id(gradeId:grade_id,name),
-          maxGrade:max_grade_id(gradeId:grade_id,name)`
-        )
-        .eq("quiz_id", "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f")
-        .single()
+  const quizId = "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f";
+
+  const quizFilter = useFilter(
+    (query) => query.eq("quiz_id", quizId, [quizId]).single(),
+    [quizId]
   );
 
-  const {
-    data: questions,
-    error: questionsError,
-    isLoading: areQuestionsLoading,
-  } = useAPI(
-    async () =>
-      await supabase
-        .from("quiz_questions")
-        .select("quizId:quiz_id,questionId:question_id,title,options")
-        .eq("quiz_id", "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f")
+  const [{ data: quiz, error: quizError, fetching: isQuizFetching }] =
+    useSelect("quizzes", {
+      columns: `quizId:quiz_id,name,isPublic:is_public,
+        thumbnailUrl:thumbnail_url,description,subjects(subjectId:subject_id,name),
+        minGrade:min_grade_id(gradeId:grade_id,name),
+        maxGrade:max_grade_id(gradeId:grade_id,name)`,
+      filter: quizFilter,
+    });
+
+  const questionsFilter = useFilter(
+    (query) => query.eq("quiz_id", quizId),
+    [quizId]
   );
+
+  const [
+    { data: questions, error: questionsError, fetching: areQuestionsFetching },
+  ] = useSelect("quiz_questions", {
+    columns: "quizId:quiz_id,questionId:question_id,title,options",
+    filter: questionsFilter,
+  });
 
   const [modalStatus, setModalStatus] = useState({
     title: "",
@@ -100,7 +97,7 @@ export default function QuizEditor() {
 
   return (
     <>
-      {isQuizLoading && areQuestionsLoading && <Spinner />}
+      {isQuizFetching && areQuestionsFetching && <Spinner />}
       {quiz && questions && (
         <div className="grid grid-cols-3 gap-x-10 py-20">
           <div className="col-span-2">
