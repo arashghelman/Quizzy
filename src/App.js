@@ -5,10 +5,10 @@ import QuizPlayer from "./components/QuizPlayer/QuizPlayer";
 
 function App() {
   return (
-    <div className="App py-10">
+    <div className="App">
       <div className="mx-32 h-full">
-        <QuizEditor />
-        {/* <UserProfile /> */}
+        {/* <QuizEditor /> */}
+        <UserProfile />
       </div>
       {/* <QuizPlayer /> */}
     </div>

@@ -33,7 +33,7 @@ export default function Button({
       className={`flex justify-center items-center gap-x-1 ${variants.get(
         variant
       )} ${custom}`}
-      onClick={() => onClick()}
+      onClick={onClick}
       {...props}
     >
       {icon && <i className={icon}></i>}

@@ -1,6 +1,7 @@
 import React from "react";
+import Button from "../shared/Button";
 
-export default function Result({ succeeded, score, correctAnswer }) {
+const Result = ({ succeeded, correctAnswer, action: { title, handler } }) => {
   const successMessages = ["Brilliant!", "Well done.", "Good job!"];
   const failureMessages = ["Oh no!", "Oops..."];
 
@@ -27,14 +28,18 @@ export default function Result({ succeeded, score, correctAnswer }) {
         <span className={`${config.color} font-medium text-xl`}>
           {config.message}
         </span>
-        {correctAnswer && (
+        {!succeeded && (
           <div className="flex justify-center items-center gap-2 text-slate-500">
             <span>Correct answer:</span>
             <span>{correctAnswer}</span>
           </div>
         )}
-        <span className="text-slate-500">Score: {score}%</span>
       </div>
+      <Button type="button" variant="greenish" onClick={handler} custom="px-4">
+        {title}
+      </Button>
     </>
   );
-}
+};
+
+export default Result;
