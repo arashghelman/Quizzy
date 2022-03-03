@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelect, useFilter } from "react-supabase";
 import QuizInfoCard from "./QuizInfoCard";
 import QuizQualityCard from "./QuizQualityCard";
@@ -11,19 +11,25 @@ import Spinner from "../shared/Spinner/Spinner";
 export default function QuizEditor() {
   const quizId = "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f";
 
+  const [quiz, setQuiz] = useState(null);
+
   const quizFilter = useFilter(
     (query) => query.eq("quiz_id", quizId, [quizId]).single(),
     [quizId]
   );
 
-  const [{ data: quiz, error: quizError, fetching: isQuizFetching }] =
-    useSelect("quizzes", {
-      columns: `quizId:quiz_id,name,isPublic:is_public,
-        thumbnailUrl:thumbnail_url,description,subjects(subjectId:subject_id,name),
-        minGrade:min_grade_id(gradeId:grade_id,name),
-        maxGrade:max_grade_id(gradeId:grade_id,name)`,
-      filter: quizFilter,
-    });
+  const [
+    { data: fetchedQuiz, error: quizError, fetching: isQuizFetching },
+    fetchQuiz,
+  ] = useSelect("quizzes", {
+    columns: `quizId:quiz_id,name,isPublic:is_public,
+      thumbnailUrl:thumbnail_url,description,subjects(subjectId:subject_id,name),
+      minGrade:min_grade_id(gradeId:grade_id,name),
+      maxGrade:max_grade_id(gradeId:grade_id,name)`,
+    filter: quizFilter,
+  });
+
+  const [questions, setQuestions] = useState([]);
 
   const questionsFilter = useFilter(
     (query) => query.eq("quiz_id", quizId),
@@ -31,18 +37,37 @@ export default function QuizEditor() {
   );
 
   const [
-    { data: questions, error: questionsError, fetching: areQuestionsFetching },
+    {
+      data: fetchedQuestions,
+      error: questionsError,
+      fetching: areQuestionsFetching,
+    },
     fetchQuestions,
   ] = useSelect("quiz_questions", {
     columns: "quizId:quiz_id,questionId:question_id,title,options",
     filter: questionsFilter,
   });
 
+  useEffect(() => {
+    setQuiz(fetchedQuiz);
+    setQuestions(fetchedQuestions);
+  }, [fetchedQuiz, fetchedQuestions]);
+
   const [modalStatus, setModalStatus] = useState({
     title: "",
     content: null,
     isActive: false,
   });
+
+  const handleQuizReload = () => {
+    const { data } = fetchQuiz();
+    setQuiz(data);
+  };
+
+  const handleQuestionsReload = () => {
+    const { data } = fetchQuestions();
+    setQuestions(data);
+  };
 
   const quizFormDefaultValues = quiz && {
     quizId: quiz.quizId,
@@ -61,25 +86,17 @@ export default function QuizEditor() {
       isActive: true,
     });
 
-  const handleQuestionAdd = () =>
+  const handleQuestionAction = (id) =>
     setModalStatus({
-      title: "Add question",
+      title: id === null ? "Add Question" : "Edit Question",
       content: (
         <QuestionForm
-          defaultValues={{ quizId: "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f" }}
-        />
-      ),
-      isActive: true,
-    });
-
-  const handleQuestionEdit = (id) =>
-    setModalStatus({
-      title: "Edit question",
-      content: (
-        <QuestionForm
-          defaultValues={questions.find(
-            (question) => question.questionId === id
-          )}
+          defaultValues={
+            id === null
+              ? { quizId }
+              : questions.find((question) => question.questionId === id)
+          }
+          onReload={handleQuestionsReload}
         />
       ),
       isActive: true,
@@ -110,9 +127,8 @@ export default function QuizEditor() {
           <div className="col-span-3">
             <QuestionsList
               listData={questions}
-              onItemEdit={handleQuestionEdit}
-              onItemAdd={handleQuestionAdd}
-              onReload={fetchQuestions}
+              onItemAction={handleQuestionAction}
+              onReload={handleQuestionsReload}
             />
           </div>
           {modalStatus.isActive && (
