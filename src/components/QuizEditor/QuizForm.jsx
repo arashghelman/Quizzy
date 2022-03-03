@@ -1,7 +1,6 @@
 import React, { useEffect, forwardRef } from "react";
+import { useSelect } from "react-supabase";
 import { useForm, useWatch } from "react-hook-form";
-import { supabase } from "../../supabaseClient";
-import { useAPI } from "../../hooks/useAPI";
 import Form from "../shared/Form";
 import TextField from "../shared/TextField/TextField";
 import ItemsSelection from "../shared/ItemsSelection";
@@ -21,22 +20,12 @@ const QuizForm = ({ defaultValues }) => {
       },
     });
 
-  const {
-    data: subjects,
-    error: subjectsError,
-    isLoading: areSubjectsLoading,
-  } = useAPI(
-    async () =>
-      await supabase.from("subjects").select("subjectId:subject_id,name")
-  );
+  const [
+    { data: subjects, error: subjectsError, fetching: areSubjectsFetching },
+  ] = useSelect("subjects", { columns: "subjectId:subject_id,name" });
 
-  const {
-    data: grades,
-    error: gradesError,
-    isLoading: areGradesLoading,
-  } = useAPI(
-    async () => await supabase.from("grades").select("gradeId:grade_id,name")
-  );
+  const [{ data: grades, error: gradesError, fetching: areGradesFetching }] =
+    useSelect("grades", { columns: "gradeId:grade_id,name" });
 
   const isPublic = useWatch({ control, name: "isPublic" });
   const quizSubjects = useWatch({ control, name: "subjects" });
@@ -81,7 +70,7 @@ const QuizForm = ({ defaultValues }) => {
 
   return (
     <Form onSubmit={handleSubmit(handleFormSubmit)}>
-      {areSubjectsLoading && areGradesLoading && <Spinner />}
+      {areSubjectsFetching && areGradesFetching && <Spinner />}
       {subjects && grades && (
         <div className="grid gap-10 text-left mb-3">
           <div className="grid grid-cols-2 gap-5">

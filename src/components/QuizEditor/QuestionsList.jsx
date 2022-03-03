@@ -1,15 +1,23 @@
 import React, { useState } from "react";
+import { useDelete } from "react-supabase";
 import List from "../shared/List";
 import Button from "../shared/Button";
 
-const QuestionsList = ({ listData, onItemEdit, onItemAdd }) => {
+const QuestionsList = ({ listData, onItemEdit, onItemAdd, onReload }) => {
   const [questions, setQuestions] = useState(listData);
 
-  const handleItemRemove = (id) => {
-    const updatedQuestions = questions.filter(
-      (question) => question.questionId !== id
+  const [{}, execute] = useDelete("quiz_questions");
+
+  const handleItemRemove = async (idToRemove) => {
+    const shouldRemove = window.confirm(
+      "Are you sure you want to delete this question?"
     );
-    setQuestions(updatedQuestions);
+    if (!shouldRemove) return;
+
+    await execute((query) => query.eq("question_id", idToRemove));
+
+    const { data } = await onReload();
+    setQuestions(data);
   };
 
   return (

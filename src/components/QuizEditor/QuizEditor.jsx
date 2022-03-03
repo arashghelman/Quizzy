@@ -32,6 +32,7 @@ export default function QuizEditor() {
 
   const [
     { data: questions, error: questionsError, fetching: areQuestionsFetching },
+    fetchQuestions,
   ] = useSelect("quiz_questions", {
     columns: "quizId:quiz_id,questionId:question_id,title,options",
     filter: questionsFilter,
@@ -111,6 +112,7 @@ export default function QuizEditor() {
               listData={questions}
               onItemEdit={handleQuestionEdit}
               onItemAdd={handleQuestionAdd}
+              onReload={fetchQuestions}
             />
           </div>
           {modalStatus.isActive && (
