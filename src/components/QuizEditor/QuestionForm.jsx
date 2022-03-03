@@ -1,12 +1,12 @@
 import React, { useEffect, forwardRef } from "react";
-import { supabase } from "../../supabaseClient";
+import { useUpsert } from "react-supabase";
 import { v4 as uuidv4 } from "uuid";
 import { useForm, useFieldArray } from "react-hook-form";
 import Form from "../shared/Form";
 import TextField from "../shared/TextField/TextField";
 import Button from "../shared/Button";
 
-const QuestionForm = ({ defaultValues }) => {
+const QuestionForm = ({ defaultValues, onReload }) => {
   const { control, register, handleSubmit, reset, getValues } = useForm({
     defaultValues: {
       title: "",
@@ -23,6 +23,8 @@ const QuestionForm = ({ defaultValues }) => {
     () => defaultValues && reset(defaultValues),
     [defaultValues, reset]
   );
+
+  const [{ data, error, fetching }, execute] = useUpsert("quiz_questions");
 
   const handleAdd = () =>
     append({ optionId: uuidv4(), value: "", isCorrect: false });
@@ -45,10 +47,10 @@ const QuestionForm = ({ defaultValues }) => {
     };
 
     data.questionId
-      ? await supabase
-          .from("quiz_questions")
-          .upsert({ ...dataToSubmit, question_id: data.questionId })
-      : await supabase.from("quiz_questions").insert([dataToSubmit]);
+      ? await execute({ ...dataToSubmit, question_id: data.questionId })
+      : await execute([dataToSubmit]);
+
+    await onReload();
   };
 
   const formFields = fields.map((field, index) => (

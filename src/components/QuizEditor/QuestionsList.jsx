@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDelete } from "react-supabase";
 import List from "../shared/List";
 import Button from "../shared/Button";
+import Spinner from "../shared/Spinner/Spinner";
 
-const QuestionsList = ({ listData, onItemEdit, onItemAdd }) => {
-  const [questions, setQuestions] = useState(listData);
+const QuestionsList = ({ listData, onItemAction, onReload }) => {
+  const [{ fetching }, execute] = useDelete("quiz_questions");
 
-  const handleItemRemove = (id) => {
-    const updatedQuestions = questions.filter(
-      (question) => question.questionId !== id
+  const handleItemRemove = async (idToRemove) => {
+    const shouldRemove = window.confirm(
+      "Are you sure you want to delete this question?"
     );
-    setQuestions(updatedQuestions);
+    if (!shouldRemove) return;
+
+    await execute((query) => query.eq("question_id", idToRemove));
+    await onReload();
   };
 
   return (
@@ -18,11 +23,11 @@ const QuestionsList = ({ listData, onItemEdit, onItemAdd }) => {
       subHeading="List of questions in my quiz"
       gap="gap-8"
     >
-      {questions.map((question, index) => (
+      {listData.map((question, index) => (
         <QuestionInfoCard
           key={question.questionId}
           info={{ ...question, number: ++index }}
-          onEdit={() => onItemEdit(question.questionId)}
+          onEdit={() => onItemAction(question.questionId)}
           onRemove={() => handleItemRemove(question.questionId)}
         />
       ))}
@@ -30,7 +35,7 @@ const QuestionsList = ({ listData, onItemEdit, onItemAdd }) => {
         type="button"
         variant="add"
         custom="bg-gray-50 rounded-md text-3xl"
-        onClick={onItemAdd}
+        onClick={() => onItemAction(null)}
       />
     </List>
   );
