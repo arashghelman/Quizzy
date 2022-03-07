@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["shared/components/*"],
+      "@hooks/*": ["shared/hooks/*"]
+    }
+  }
+}
