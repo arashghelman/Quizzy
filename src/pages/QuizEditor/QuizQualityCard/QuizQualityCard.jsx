@@ -1,4 +1,5 @@
 import React from "react";
+import Card from "@components/Card";
 import QuizTodoItem from "./QuizTodoItem";
 import ProgressBar from "@components/ProgressBar";
 
@@ -48,10 +49,7 @@ export default function QuizQualityCard({ quality }) {
   }
 
   return (
-    <section
-      className="flex flex-col gap-y-5 px-7 py-6 rounded-md bg-white 
-            text-left text-blue-1000 shadow-md"
-    >
+    <Card layout="flex flex-col gap-y-5 px-7 py-6 text-left">
       <h1 className="font-medium">Quiz quality score</h1>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-x-1">
@@ -76,6 +74,6 @@ export default function QuizQualityCard({ quality }) {
           </QuizTodoItem>
         ))}
       </ul>
-    </section>
+    </Card>
   );
 }

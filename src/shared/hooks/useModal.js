@@ -19,5 +19,5 @@ export const useModal = () => {
     </Modal>
   );
 
-  return [modal, triggerModal];
+  return { modal, triggerModal };
 };

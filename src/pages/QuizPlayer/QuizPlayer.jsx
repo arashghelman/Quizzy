@@ -1,27 +1,27 @@
 import React from "react";
+import { serverError } from "@constants/errors";
 import { useSelect, useFilter } from "react-supabase";
 import { useCounter } from "./useCounter";
 import { useAnswers } from "./useAnswers";
 import ProgressBar from "@components/ProgressBar";
-import Slider from "./Slider/Slider";
-import QuestionCard from "./QuestionCard/QuestionCard";
-import AnswerResult from "./AnswerResult/AnswerResult";
-import QuizResult from "./QuizResult/QuizResult";
-import Spinner from "@components/Spinner/Spinner";
+import Message from "@components/Message";
+import Slider from "./Slider";
+import QuestionCard from "./QuestionCard";
+import AnswerResult from "./AnswerResult";
+import QuizResult from "./QuizResult";
+import Spinner from "@components/Spinner";
 
 export default function QuizPlayer() {
   const quizId = "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f";
 
   const { counter, increment } = useCounter(0);
 
-  const [{ count: questionsCount, data: questions, fetching }] = useSelect(
-    "quiz_questions",
-    {
+  const [{ count: questionsCount, data: questions, error, fetching }] =
+    useSelect("quiz_questions", {
       columns: "questionId:question_id,title,options",
       filter: useFilter((query) => query.eq("quiz_id", quizId)),
       options: { count: "exact" },
-    }
-  );
+    });
 
   const { answers, result, select, setQuizResult } = useAnswers(questions);
 
@@ -54,6 +54,7 @@ export default function QuizPlayer() {
   return (
     <>
       {fetching && <Spinner />}
+      {error && <Message text={serverError} />}
       {questions && (
         <div className="flex flex-col h-full py-10">
           <div className="w-1/2 flex flex-col gap-3 self-center">

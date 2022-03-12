@@ -1,26 +1,26 @@
 import React from "react";
+import { removeIcon, editIcon } from "@constants/uiConstants";
+import Card from "@components/Card";
 import Button from "@components/Button";
 
 export default function QuestionInfoCard({ info, onEdit, onRemove }) {
   return (
-    <li className="flex flex-col gap-y-6 rounded-md p-3 bg-white text-blue-1000 shadow-md">
+    <Card layout="flex flex-col gap-y-6 p-3">
       <div className="flex gap-x-3">
-        <i
+        <div
           className="rounded-sm w-16 h-16 flex justify-center items-center 
-              bg-amber-300 ri-checkbox-multiple-line text-lg"
-        ></i>
+              bg-amber-300 text-lg"
+        >
+          <i className="ri-checkbox-multiple-line"></i>
+        </div>
         <div className="flex flex-col flex-1 gap-y-2">
           <div className="flex justify-between items-center">
             <h2 className="text-xs">Question {info.number}</h2>
             <div className="flex gap-x-3 text-sm">
-              <Button icon="ri-pencil-line" onClick={onEdit}>
+              <Button icon={editIcon} onClick={onEdit}>
                 Edit
               </Button>
-              <Button
-                icon="ri-delete-bin-line"
-                custom="w-7 h-7"
-                onClick={onRemove}
-              />
+              <Button icon={removeIcon} onClick={onRemove} />
             </div>
           </div>
           <h1 className="text-left font-medium">Q. {info.title}</h1>
@@ -36,7 +36,7 @@ export default function QuestionInfoCard({ info, onEdit, onRemove }) {
           </Option>
         ))}
       </ul>
-    </li>
+    </Card>
   );
 }
 

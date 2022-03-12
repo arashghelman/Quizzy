@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelect } from "react-supabase";
 
-const useData = (tableName, columns, filter) => {
+export function useData(tableName, columns, filter) {
   const [{ data: fetchedData, error: fetchedError, fetching }, reexecute] =
     useSelect(tableName, {
       columns: columns,
@@ -24,6 +24,4 @@ const useData = (tableName, columns, filter) => {
   };
 
   return { ...state, loadData };
-};
-
-export { useData };
+}

@@ -1,12 +1,14 @@
 import { useFilter } from "react-supabase";
-import { useModal } from "@hooks/index";
+import { useModal } from "@hooks";
 import { useData } from "./useData";
-import QuizInfoCard from "./QuizInfoCard/QuizInfoCard";
-import QuizQualityCard from "./QuizQualityCard/QuizQualityCard";
-import QuestionsList from "./QuestionsList/QuestionsList";
+import { serverError } from "@constants/errors";
+import QuizInfoCard from "./QuizInfoCard";
+import QuizQualityCard from "./QuizQualityCard";
+import QuestionsList from "./QuestionsList";
 import QuizEditForm from "./QuizEditForm/QuizEditForm";
-import QuestionForm from "./QuestionForm/QuestionForm";
-import Spinner from "@components/Spinner/Spinner";
+import QuestionForm from "./QuestionForm";
+import Spinner from "@components/Spinner";
+import Message from "@components/Message";
 
 export default function QuizEditor() {
   const quizId = "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f";
@@ -39,7 +41,7 @@ export default function QuizEditor() {
     useFilter((query) => query.eq("quiz_id", quizId), [quizId])
   );
 
-  const [modal, triggerModal] = useModal();
+  const { modal, triggerModal } = useModal();
 
   const quizFormDefaultValues = quiz && {
     quizId: quiz.quizId,
@@ -55,7 +57,10 @@ export default function QuizEditor() {
   const handleQuizEdit = () =>
     triggerModal(
       "Edit Quiz",
-      <QuizEditForm defaultValues={quizFormDefaultValues} />
+      <QuizEditForm
+        defaultValues={quizFormDefaultValues}
+        onReload={() => loadQuiz()}
+      />
     );
 
   const handleQuestionAction = (id) =>
@@ -83,6 +88,7 @@ export default function QuizEditor() {
   return (
     <>
       {isQuizLoading && areQuestionsLoading && <Spinner />}
+      {(quizError || questionsError) && <Message text={serverError} />}
       {quiz && questions && (
         <div className="grid grid-cols-3 gap-x-10 py-20">
           <div className="col-span-2">
@@ -95,11 +101,12 @@ export default function QuizEditor() {
             <QuestionsList
               listData={questions}
               onItemAction={handleQuestionAction}
+              onReload={() => loadQuestions()}
             />
           </div>
-          {modal}
         </div>
       )}
+      {modal}
     </>
   );
 }

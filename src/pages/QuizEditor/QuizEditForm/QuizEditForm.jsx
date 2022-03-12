@@ -1,103 +1,54 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelect } from "react-supabase";
-import { useForm, useWatch } from "react-hook-form";
-import { supabase } from "supabaseClient";
-import { bucketBaseUrl } from "constants/supabaseConstants";
-import Form from "@components/Form";
+import { useEditForm } from "./useEditForm";
+import * as QuizForm from "@components/QuizForm";
+import Form from "@components/Form/Form";
 import TextField from "@components/TextField/TextField";
-import ItemsSelection from "@components/ItemsSelection";
-import GradeSelect from "./GradeSelect";
-import VisibilitySwitch from "./VisibilitySwitch";
-import ThumbnailFileInput from "./ThumbnailFileInput";
 import Spinner from "@components/Spinner/Spinner";
 
-export default function QuizEditForm({ defaultValues }) {
-  const { register, control, getValues, setValue, handleSubmit, reset } =
-    useForm({
-      defaultValues: {
-        name: "",
-        description: "",
-        isPublic: false,
-        subjects: [],
-        minGradeId: {},
-        maxGradeId: {},
-        thumbnailUrl: "",
-      },
-    });
+export default function QuizEditForm({ defaultValues, onReload }) {
+  const [
+    register,
+    { submit, isSubmitting },
+    { error },
+    { isPublic },
+    { subjects, selectSubject },
+    { minGradeId, maxGradeId, selectGrade },
+    { thumbnailUrl, uploadThumbnail },
+  ] = useEditForm(defaultValues, async () => await onReload());
 
-  const [{ data: subjects, fetching: areSubjectsFetching }] = useSelect(
+  const [{ data: fetchedSubjects, fetching: areSubjectsFetching }] = useSelect(
     "subjects",
     { columns: "subjectId:subject_id,name" }
   );
 
-  const [{ data: grades, fetching: areGradesFetching }] = useSelect("grades", {
-    columns: "gradeId:grade_id,name",
-  });
-
-  const isPublic = useWatch({ control, name: "isPublic" });
-  const quizSubjects = useWatch({ control, name: "subjects" });
-  const thumbnailUrl = useWatch({ control, name: "thumbnailUrl" });
-  const minGradeId = getValues("minGradeId");
-  const maxGradeId = getValues("maxGradeId");
-
-  useEffect(
-    () => defaultValues && reset(defaultValues),
-    [defaultValues, reset]
+  const [{ data: fetchedGrades, fetching: areGradesFetching }] = useSelect(
+    "grades",
+    {
+      columns: "gradeId:grade_id,name",
+    }
   );
 
-  const handleSubjectCheck = (idToCheck) => {
-    const prevSelectedId = quizSubjects.find((s) => s === idToCheck);
-    if (prevSelectedId !== undefined) {
-      const index = quizSubjects.indexOf(prevSelectedId);
-      quizSubjects.splice(index, 1);
-      setValue("subjects", quizSubjects);
-
-      return;
-    }
-
-    if (quizSubjects.length >= 3) {
-      quizSubjects.shift();
-      setValue("subjects", quizSubjects);
-    }
-
-    quizSubjects.push(idToCheck);
-    setValue("subjects", quizSubjects);
-  };
-
-  const handleGradeSelect = (propName) => (e) => {
-    const gradeId = e.target.value;
-    setValue(propName, gradeId);
-  };
-
-  const handleThumbnailUpload = async (e) => {
-    const file = e.target.files[0];
-
-    const { data, error } = await supabase.storage
-      .from("thumbnails")
-      .upload(`${Date.now()}_${file.name}`, file);
-
-    if (data) {
-      const url = bucketBaseUrl + data.Key;
-      setValue("thumbnailUrl", url);
-    }
-  };
-
-  const handleFormSubmit = (data) => console.log(data);
-
-  const gradeOptions = grades?.map((grade) => ({
+  const gradeOptions = fetchedGrades?.map((grade) => ({
     ...grade,
     id: grade.gradeId,
   }));
 
+  const subjectItems = fetchedSubjects?.map((subject) => ({
+    ...subject,
+    id: subject.subjectId,
+    isSelected: subjects.find((s) => s === subject.subjectId) ? true : false,
+  }));
+
   return (
-    <Form onSubmit={handleSubmit(handleFormSubmit)}>
+    <Form isSubmitting={isSubmitting} error={error} onSubmit={submit}>
       {areSubjectsFetching && areGradesFetching && <Spinner />}
-      {subjects && grades && (
+      {fetchedSubjects && fetchedGrades && (
         <div className="grid gap-10 text-left mb-3">
           <div className="grid grid-cols-2 gap-5">
-            <ThumbnailFileInput
+            <QuizForm.ThumbnailFileInput
               url={thumbnailUrl}
-              onChange={handleThumbnailUpload}
+              onChange={uploadThumbnail}
             />
             <div className="grid grid-cols-1 gap-8">
               <TextField id="name" label="Quiz name" {...register("name")} />
@@ -114,34 +65,31 @@ export default function QuizEditForm({ defaultValues }) {
               <span className="text-sm text-gray-400">
                 {isPublic ? "Public" : "Private"}
               </span>
-              <VisibilitySwitch id="isPublic" {...register("isPublic")} />
+              <QuizForm.VisibilitySwitch
+                id="isPublic"
+                {...register("isPublic")}
+              />
             </div>
           </div>
           <div className="flex flex-col gap-4">
             <Title>Subjects</Title>
-            <ItemsSelection
-              items={subjects.map((subject) => ({
-                ...subject,
-                id: subject.subjectId,
-                isSelected: quizSubjects.find((s) => s === subject.subjectId)
-                  ? true
-                  : false,
-              }))}
-              onSelect={handleSubjectCheck}
+            <QuizForm.SubjectsSelection
+              subjects={subjectItems}
+              onSelect={selectSubject}
             />
           </div>
           <div className="flex flex-col gap-4">
             <Title>Grades</Title>
             <div className="grid grid-cols-2 gap-5">
-              <GradeSelect
+              <QuizForm.GradeSelect
                 options={gradeOptions}
                 defaultValue={minGradeId}
-                onSelect={handleGradeSelect("minGradeId")}
+                onSelect={selectGrade("minGradeId")}
               />
-              <GradeSelect
+              <QuizForm.GradeSelect
                 options={gradeOptions}
                 defaultValue={maxGradeId}
-                onSelect={handleGradeSelect("maxGradeId")}
+                onSelect={selectGrade("maxGradeId")}
               />
             </div>
           </div>

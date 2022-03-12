@@ -1,11 +1,9 @@
 import React from "react";
-import InfoItem from "@components/InfoItem";
-import QuizSubjects from "@components/QuizSubjects";
+import { editIcon, removeIcon } from "@constants/uiConstants";
+import Card from "@components/Card";
+import * as QuizInfo from "@components/QuizInfo";
 import EditText from "@components/EditText";
 import Button from "@components/Button";
-import QuizGrades from "@components/QuizGrades";
-import InfoHeading from "@components/InfoHeading";
-import QuizThumbnail from "./QuizThumbnail";
 
 export default function QuizInfoCard({ info, onEdit }) {
   const {
@@ -18,38 +16,52 @@ export default function QuizInfoCard({ info, onEdit }) {
     thumbnailUrl,
   } = info;
 
+  const handleRemove = () => {
+    const shouldRemove = window.confirm(
+      "Are you sure you want to delete this quiz?"
+    );
+
+    if (!shouldRemove) return;
+  };
+
   return (
-    <section className="rounded-md shadow-md grid grid-flow-col bg-white py-6">
-      <QuizThumbnail url={thumbnailUrl} onClick={onEdit} />
+    <Card layout="grid grid-flow-col py-6">
+      <div className="ml-5 border-1 border-gray-300 border-dashed rounded-sm h-full">
+        <QuizInfo.Thumbnail url={thumbnailUrl} />
+      </div>
       <div className="px-8 flex flex-col text-left">
         <div className="flex justify-between items-start">
-          <InfoHeading
+          <QuizInfo.Heading
             heading={name}
             subHeading={isPublic ? "Public" : "Private"}
           />
-          <Button icon="ri-pencil-line" onClick={onEdit} custom="py-1">
-            Edit
-          </Button>
+          <div className="flex gap-3">
+            <Button icon={editIcon} onClick={onEdit}>
+              Edit
+            </Button>
+            <Button icon={removeIcon} onClick={handleRemove} />
+          </div>
         </div>
         <ul className="mt-7">
-          <InfoItem icon="ri-book-line">
+          <QuizInfo.Item icon="ri-book-line">
             {subjects ? (
-              <QuizSubjects data={subjects} />
-            ) : (
-              <EditText onClick={onEdit}>Click here to add subjects</EditText>
-            )}
-          </InfoItem>
-          <InfoItem icon="ri-star-line">
+              <QuizInfo.Subjects
+                subjects={subjects.map((subject) => subject.name)}
+              />
+            ) : null}
+          </QuizInfo.Item>
+          <QuizInfo.Item icon="ri-star-line">
             {minGrade && maxGrade ? (
-              <QuizGrades min={minGrade} max={maxGrade} />
-            ) : (
-              <EditText onClick={onEdit}>Click here to add grades</EditText>
-            )}
-          </InfoItem>
+              <QuizInfo.Grades
+                minGrade={minGrade.name}
+                maxGrade={maxGrade.name}
+              />
+            ) : null}
+          </QuizInfo.Item>
         </ul>
-        <div className="leading-7 text-sm text-gray-600 w-[380px] h-[84px]">
+        <div className="w-[380px] h-[84px]">
           {description ? (
-            <p>{description}</p>
+            <QuizInfo.Description text={description} />
           ) : (
             <EditText onClick={onEdit}>
               Click here to write a description.
@@ -57,6 +69,6 @@ export default function QuizInfoCard({ info, onEdit }) {
           )}
         </div>
       </div>
-    </section>
+    </Card>
   );
 }

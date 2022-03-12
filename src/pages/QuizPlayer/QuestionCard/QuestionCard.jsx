@@ -40,12 +40,7 @@ export default function QuestionCard({ data, backSide, onOptionCheck }) {
             ))}
           </div>
           <div className="self-end">
-            <Button
-              type="button"
-              variant="greenish"
-              custom="px-5"
-              onClick={handleSubmit}
-            >
+            <Button type="button" variant="greenish" onClick={handleSubmit}>
               Submit
             </Button>
           </div>
