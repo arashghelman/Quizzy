@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function List({ children, heading, subHeading, gap }) {
+export default function List({ children, heading, subHeading, layout }) {
   return (
     <div className="grid gap-10">
       {heading && (
@@ -9,7 +9,7 @@ export default function List({ children, heading, subHeading, gap }) {
           {subHeading && <h2>{subHeading}</h2>}
         </div>
       )}
-      <ul className={`grid grid-cols-2 ${gap} auto-rows-fr`}>{children}</ul>
+      <ul className={`grid ${layout} auto-rows-fr`}>{children}</ul>
     </div>
   );
 }

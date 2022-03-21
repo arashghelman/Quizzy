@@ -7,12 +7,12 @@ export default function ScoreProgressBar({ value }) {
     <CircularProgressbar
       value={value}
       text={`${value} %`}
-      strokeWidth={5}
+      strokeWidth={4}
       styles={buildStyles({
         pathColor: "#34d399",
         trailColor: "#f87171",
         textColor: "#31426b",
-        textSize: "16px",
+        textSize: "15px",
       })}
     />
   );

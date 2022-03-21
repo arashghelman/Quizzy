@@ -27,9 +27,13 @@ export function useSearch() {
       result = await supabase
         .from("quizzes")
         .select(query)
+        .eq("is_public", true)
         .textSearch("name", keyword);
     } else {
-      result = await supabase.from("quizzes").select(query);
+      result = await supabase
+        .from("quizzes")
+        .select(query)
+        .eq("is_public", true);
     }
 
     result.data && setData(result.data);

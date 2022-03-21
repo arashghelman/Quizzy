@@ -14,7 +14,7 @@ export default function QuizEditForm({ defaultValues, onReload }) {
     { isPublic },
     { subjects, selectSubject },
     { minGradeId, maxGradeId, selectGrade },
-    { thumbnailUrl, uploadThumbnail },
+    { thumbnailUrl, uploadThumbnail, isUploading },
   ] = useEditForm(defaultValues, async () => await onReload());
 
   const [{ data: fetchedSubjects, fetching: areSubjectsFetching }] = useSelect(
@@ -48,7 +48,10 @@ export default function QuizEditForm({ defaultValues, onReload }) {
           <div className="grid grid-cols-2 gap-5">
             <QuizForm.ThumbnailFileInput
               url={thumbnailUrl}
-              onChange={uploadThumbnail}
+              isUploading={isUploading}
+              {...register("thumbnailUrl", {
+                onChange: (e) => uploadThumbnail(e),
+              })}
             />
             <div className="grid grid-cols-1 gap-8">
               <TextField id="name" label="Quiz name" {...register("name")} />

@@ -22,7 +22,7 @@ export default function QuestionsList({ listData, onItemAction, onReload }) {
     <List
       heading="Questions"
       subHeading="List of questions in my quiz"
-      gap="gap-8"
+      layout="grid-cols-2 gap-8"
     >
       {listData.map((question, index) => (
         <QuestionInfoCard
@@ -35,7 +35,7 @@ export default function QuestionsList({ listData, onItemAction, onReload }) {
       <Button
         icon={addIcon}
         variant="custom"
-        customStyle="border-1 border-gray-300 hover:border-blue-400 
+        customStyle="border-1 py-20 border-gray-300 hover:border-blue-400 
           text-gray-300 hover:text-blue-400 bg-slate-50 
           border-dashed rounded-md text-3xl"
         onClick={() => onItemAction(null)}

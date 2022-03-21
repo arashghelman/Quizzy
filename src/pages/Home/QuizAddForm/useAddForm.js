@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useInsert } from "react-supabase";
+import { useNavigate } from "react-router";
 import { useSubjectsSelection } from "@hooks";
 
 export function useAddForm(callback) {
@@ -19,6 +20,8 @@ export function useAddForm(callback) {
     insertSubjects,
   ] = useInsert("quiz_subjects");
 
+  const navigate = useNavigate();
+
   const submit = handleSubmit(async (values) => {
     const { data } = await insertQuiz({ name: values.name });
     if (!data) return;
@@ -32,6 +35,8 @@ export function useAddForm(callback) {
           })
       )
     );
+
+    navigate(`editor/${data[0].quiz_id}`);
   });
 
   return [

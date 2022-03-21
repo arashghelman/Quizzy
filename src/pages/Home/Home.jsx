@@ -29,7 +29,7 @@ export default function Home() {
   ));
 
   return (
-    <>
+    <div className="mx-32 h-full">
       {error && <Message text={serverError} />}
       <div className="py-10 flex flex-col gap-20">
         <div className="flex">
@@ -48,13 +48,13 @@ export default function Home() {
             heading={
               keyword ? `Search results for: ${keyword}` : "Latest quizzes"
             }
-            gap="gap-9"
+            layout="grid-cols-3 gap-9"
           >
             {quizzes}
           </List>
         </div>
       </div>
       {modal}
-    </>
+    </div>
   );
 }

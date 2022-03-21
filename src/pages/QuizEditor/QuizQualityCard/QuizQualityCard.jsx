@@ -9,7 +9,6 @@ export default function QuizQualityCard({ quality }) {
       title: "Pick a relevant name for your quiz",
       isCompleted: quality.hasName,
     },
-    { title: "Add a quiz thumbnail", isCompleted: quality.hasThumbnail },
     { title: "Add grades", isCompleted: quality.hasGrades },
     {
       title: "Write a brief description about your quiz",
@@ -19,6 +18,7 @@ export default function QuizQualityCard({ quality }) {
       title: "Add at least 4 questions",
       isCompleted: quality.hasEnoughQuestions,
     },
+    { title: "Make your quiz public", isCompleted: quality.isPublic },
   ];
 
   const value = todos.filter((x) => x.isCompleted).length;

@@ -1,4 +1,5 @@
 import { useFilter } from "react-supabase";
+import { useParams } from "react-router";
 import { useModal } from "@hooks";
 import { useData } from "./useData";
 import { serverError } from "@constants/errors";
@@ -11,7 +12,7 @@ import Spinner from "@components/Spinner";
 import Message from "@components/Message";
 
 export default function QuizEditor() {
-  const quizId = "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f";
+  const { quizId } = useParams();
 
   const {
     data: quiz,
@@ -49,8 +50,8 @@ export default function QuizEditor() {
     isPublic: quiz.isPublic,
     description: quiz.description,
     subjects: quiz.subjects.map((subject) => subject.subjectId),
-    minGradeId: quiz.minGrade.gradeId,
-    maxGradeId: quiz.maxGrade.gradeId,
+    minGradeId: quiz.minGrade?.gradeId,
+    maxGradeId: quiz.maxGrade?.gradeId,
     thumbnailUrl: quiz.thumbnailUrl,
   };
 
@@ -79,14 +80,14 @@ export default function QuizEditor() {
   const quizQuality = quiz &&
     questions && {
       hasName: quiz.name != null,
-      hasThumbnail: quiz.thumbnailUrl != null,
       hasGrades: quiz.maxGrade != null && quiz.minGrade != null,
       hasDescription: quiz.description != null,
       hasEnoughQuestions: questions.length >= 4,
+      isPublic: quiz.isPublic,
     };
 
   return (
-    <>
+    <div className="mx-32 h-full">
       {isQuizLoading && areQuestionsLoading && <Spinner />}
       {(quizError || questionsError) && <Message text={serverError} />}
       {quiz && questions && (
@@ -107,6 +108,6 @@ export default function QuizEditor() {
         </div>
       )}
       {modal}
-    </>
+    </div>
   );
 }

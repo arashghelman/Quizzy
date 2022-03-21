@@ -4,7 +4,7 @@ import CardSide from "./CardSide";
 import AnswerRadioButton from "./AnswerRadioButton";
 
 export default function QuestionCard({ data, backSide, onOptionCheck }) {
-  const { questionId, title, options, number } = data;
+  const { questionId, title, options, number, isAnswered } = data;
 
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -40,7 +40,12 @@ export default function QuestionCard({ data, backSide, onOptionCheck }) {
             ))}
           </div>
           <div className="self-end">
-            <Button type="button" variant="greenish" onClick={handleSubmit}>
+            <Button
+              type="button"
+              variant="greenish"
+              isDisabled={!isAnswered}
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </div>

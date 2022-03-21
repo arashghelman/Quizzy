@@ -1,8 +1,8 @@
 import { React } from "react";
 import { closeIcon } from "@constants/uiConstants";
 import Card from "@components/Card";
-import Button from "./Button";
-import Backdrop from "./Backdrop";
+import Button from "@components/Button";
+import Backdrop from "@components/Backdrop";
 
 export default function Modal({ children, heading, onClose }) {
   return (

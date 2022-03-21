@@ -1,6 +1,7 @@
 import React from "react";
 import { serverError } from "@constants/errors";
 import { useSelect, useFilter } from "react-supabase";
+import { useParams } from "react-router";
 import { useCounter } from "./useCounter";
 import { useAnswers } from "./useAnswers";
 import ProgressBar from "@components/ProgressBar";
@@ -12,7 +13,7 @@ import QuizResult from "./QuizResult";
 import Spinner from "@components/Spinner";
 
 export default function QuizPlayer() {
-  const quizId = "cbaa6ddd-435e-4ec4-a6a5-969dd2e93d2f";
+  const { quizId } = useParams();
 
   const { counter, increment } = useCounter(0);
 
@@ -28,7 +29,12 @@ export default function QuizPlayer() {
   const cards = questions?.map((question, index) => (
     <QuestionCard
       key={question.questionId}
-      data={{ ...question, number: ++index }}
+      data={{
+        ...question,
+        number: ++index,
+        isAnswered: answers?.find((a) => a.questionId === question.questionId)
+          .optionId,
+      }}
       backSide={
         result ? (
           <QuizResult result={result} />

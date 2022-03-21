@@ -1,19 +1,22 @@
 import { supabase } from "supabaseClient";
 import { Provider } from "react-supabase";
-import Home from "pages/Home/Home";
-import QuizEditor from "./pages/QuizEditor/QuizEditor";
-import QuizPlayer from "./pages/QuizPlayer/QuizPlayer";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Home, QuizEditor, QuizPlayer, NotFound } from "pages";
 
 function App() {
   return (
     <Provider value={supabase}>
-      <div className="text-center h-screen text-blue-1000">
-        <div className="mx-32 h-full">
-          <QuizEditor />
-          {/* <Home /> */}
+      <Router>
+        <div className="text-center h-screen text-blue-1000">
+          <Routes>
+            <Route path={"/"} element={<Home />} />
+            <Route path={"/home"} element={<Home />} />
+            <Route path={"/editor/:quizId"} element={<QuizEditor />} />
+            <Route path={"/player/:quizId"} element={<QuizPlayer />} />
+            <Route path={"*"} element={<NotFound />} />
+          </Routes>
         </div>
-        {/* <QuizPlayer /> */}
-      </div>
+      </Router>
     </Provider>
   );
 }

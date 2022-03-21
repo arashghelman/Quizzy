@@ -5,6 +5,7 @@ export default function Button({
   type = "button",
   icon,
   variant = "default",
+  isDisabled,
   onClick,
   customStyle,
   ...props
@@ -19,7 +20,9 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`flex justify-center items-center gap-x-1 ${variants[variant]}`}
+      className={`flex justify-center items-center gap-x-1 ${
+        variants[variant]
+      } ${isDisabled && "opacity-70 pointer-events-none"}`}
       onClick={onClick}
       {...props}
     >

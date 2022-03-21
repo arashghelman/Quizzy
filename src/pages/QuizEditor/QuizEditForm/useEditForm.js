@@ -1,5 +1,5 @@
 import { useForm, useWatch } from "react-hook-form";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSubjectsSelection } from "@hooks";
 import { useDelete, useUpsert } from "react-supabase";
 import { supabase } from "supabaseClient";
@@ -37,7 +37,11 @@ export function useEditForm(defaultValues, callback) {
     setValue(propName, gradeId);
   };
 
+  const [isUploading, setIsUploading] = useState(false);
+
   const uploadThumbnail = async (e) => {
+    setIsUploading(true);
+
     const file = e.target.files[0];
 
     const { data } = await supabase.storage
@@ -48,6 +52,8 @@ export function useEditForm(defaultValues, callback) {
       const url = bucketBaseUrl + data.Key;
       setValue("thumbnailUrl", url);
     }
+
+    setIsUploading(false);
   };
 
   const [
@@ -93,6 +99,6 @@ export function useEditForm(defaultValues, callback) {
     { isPublic },
     { subjects, selectSubject },
     { minGradeId, maxGradeId, selectGrade },
-    { thumbnailUrl, uploadThumbnail },
+    { thumbnailUrl, uploadThumbnail, isUploading },
   ];
 }

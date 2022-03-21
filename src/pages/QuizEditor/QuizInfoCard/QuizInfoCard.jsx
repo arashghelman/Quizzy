@@ -1,5 +1,7 @@
 import React from "react";
-import { editIcon, removeIcon } from "@constants/uiConstants";
+import { editIcon, removeIcon, loaderIcon } from "@constants/uiConstants";
+import { useDelete } from "react-supabase";
+import { useNavigate } from "react-router";
 import Card from "@components/Card";
 import * as QuizInfo from "@components/QuizInfo";
 import EditText from "@components/EditText";
@@ -7,6 +9,7 @@ import Button from "@components/Button";
 
 export default function QuizInfoCard({ info, onEdit }) {
   const {
+    quizId,
     name,
     isPublic,
     subjects,
@@ -16,12 +19,30 @@ export default function QuizInfoCard({ info, onEdit }) {
     thumbnailUrl,
   } = info;
 
-  const handleRemove = () => {
+  const navigate = useNavigate();
+
+  const [{ isDeletingSubjects }, deleteSubjects] = useDelete("quiz_subjects");
+
+  const [{ isDeletingQuiz }, deleteQuiz] = useDelete("quizzes");
+
+  const handleRemove = async () => {
     const shouldRemove = window.confirm(
       "Are you sure you want to delete this quiz?"
     );
 
     if (!shouldRemove) return;
+
+    const { subjectsError } = await deleteSubjects((query) =>
+      query.eq("quiz_id", quizId)
+    );
+    if (subjectsError) return;
+
+    const { quizError } = await deleteQuiz((query) =>
+      query.eq("quiz_id", quizId)
+    );
+    if (quizError) return;
+
+    navigate("/");
   };
 
   return (
@@ -39,7 +60,10 @@ export default function QuizInfoCard({ info, onEdit }) {
             <Button icon={editIcon} onClick={onEdit}>
               Edit
             </Button>
-            <Button icon={removeIcon} onClick={handleRemove} />
+            <Button
+              icon={isDeletingQuiz ? loaderIcon : removeIcon}
+              onClick={handleRemove}
+            />
           </div>
         </div>
         <ul className="mt-7">
@@ -48,7 +72,9 @@ export default function QuizInfoCard({ info, onEdit }) {
               <QuizInfo.Subjects
                 subjects={subjects.map((subject) => subject.name)}
               />
-            ) : null}
+            ) : (
+              <EditText onClick={onEdit}>Click here to add subjects</EditText>
+            )}
           </QuizInfo.Item>
           <QuizInfo.Item icon="ri-star-line">
             {minGrade && maxGrade ? (
@@ -56,10 +82,12 @@ export default function QuizInfoCard({ info, onEdit }) {
                 minGrade={minGrade.name}
                 maxGrade={maxGrade.name}
               />
-            ) : null}
+            ) : (
+              <EditText onClick={onEdit}>Click here to add grades</EditText>
+            )}
           </QuizInfo.Item>
         </ul>
-        <div className="w-[380px] h-[84px]">
+        <div className="w-[380px] h-[84px] text-gray-500 text-sm">
           {description ? (
             <QuizInfo.Description text={description} />
           ) : (
