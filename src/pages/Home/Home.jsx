@@ -19,6 +19,7 @@ export default function Home() {
 
   const quizzes = data?.map((quiz) => (
     <QuizFrontCard
+      key={quiz.quizId}
       data={{
         ...quiz,
         subjects: quiz.subjects.map((subject) => subject.name),
